@@ -4,7 +4,10 @@
 	"private": true,
 	"scripts": {
 		"start": "node ./bin/www",
-		"dev": "set DEBUG=polymath:* & npm start"
+		"dev": "set DEBUG=polymath:* & npm start",
+		"lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.tsx .",
+		"lint:fix": "npm run lint -- --fix",
+		"prepare": "husky install"
 	},
 	"lint-staged": {
 		"*.js": "eslint --cache --fix"
@@ -28,7 +31,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-import": "^2.25.3",
 		"eslint-plugin-prettier": "^4.0.0",
-		"husky": "^7.0.4",
+		"husky": "^7.0.0",
 		"lint-staged": "^12.0.2",
 		"prettier": "^2.4.1",
 		"pretty-quick": "^3.1.2"
