@@ -10,10 +10,13 @@ a {
 .termsOfServiceBody {
   padding: 25px 50px;
   font:  14px "Times New Roman";
+  color: black;
 }
 
 .termsOfServiceHeader {
 
   padding-top: 30px;
   font: 24px "Times New Roman" bold;
+  color: black;
+
 }
