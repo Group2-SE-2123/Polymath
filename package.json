@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"start": "node ./src/server.js",
+		"start": "babel-node ./src/server.js",
 		"dev": "nodemon --exec babel-node ./src/server.js",
 		"build": "babel src -d lib",
 		"lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.tsx .",
