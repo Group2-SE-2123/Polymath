@@ -6,6 +6,7 @@ import logger from "morgan";
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
 import termsRouter from "./routes/terms-of-service";
+import privacyRouter from "./routes/privacy_policy";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/terms", termsRouter);
+app.use("/privacy", privacyRouter);
 
 // error handler
 app.get("*", (req, res) => {
