@@ -8,5 +8,8 @@
 				"endOfLine": "auto"
 			}
 		]
+	},
+	"settings": {
+		"import/resolver": "babel-plugin-root-import"
 	}
 }
