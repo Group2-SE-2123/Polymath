@@ -5,6 +5,7 @@ import logger from "morgan";
 
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
+import questionRouter from "./api/question";
 import termsRouter from "./routes/terms-of-service";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/terms", termsRouter);
+app.use("/api", questionRouter);
 
 // error handler
 app.get("*", (req, res) => {
