@@ -1,9 +1,12 @@
 import React from "react";
-import Header from "./components/Header";
-import OtherHeader from "./components/OtherHeader";
+import Landing from "./components/Landing";
 
 function App() {
-	return <OtherHeader />;
+	return (
+		<>
+			<Landing />
+		</>
+	);
 }
 
 export default App;

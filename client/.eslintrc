@@ -18,6 +18,12 @@
 	"settings": {
 		"react": {
 			"version": "detect"
-		}
+		},
+		"import/resolver": {
+			"node": {
+				"extensions": [".js", ".jsx"]
+			}
+		},
+		"import/no-unresolved": [2, { "caseSensitive": false }]
 	}
 }

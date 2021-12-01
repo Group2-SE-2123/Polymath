@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import Logo from "../../images/Logo.svg";
 
 function Header() {
+	const [isOpen, setIsOpen] = useState(false);
+	const openMenu = () => setIsOpen(true);
+	const closeMenu = () => setIsOpen(false);
+
 	return (
 		<div className="relative bg-white">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -17,7 +22,7 @@ function Header() {
 					<div className="flex justify-start lg:w-0 lg:flex-1">
 						<a href="#">
 							<span className="sr-only">Workflow</span>
-							<img className="h-8 w-auto sm:h-10" src="images/Logo.svg" alt="" />
+							<img className="h-8 w-auto sm:h-10" src={Logo} alt="" />
 						</a>
 					</div>
 					<div className="-mr-2 -my-2 md:hidden">
@@ -35,6 +40,7 @@ function Header() {
 						focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500
 					"
 							aria-expanded="false"
+							onClick={openMenu}
 						>
 							<span className="sr-only">Open menu</span>
 							<svg
@@ -136,8 +142,9 @@ function Header() {
 			</div>
 
 			<div
-				x-show="dropDownMenu"
-				className="absolute z-20 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+				className={`absolute z-20 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden ${
+					isOpen ? "visible" : "invisible"
+				}`}
 			>
 				<div
 					className="
@@ -174,6 +181,7 @@ function Header() {
 								focus:ring-inset
 								focus:ring-indigo-500
 							"
+									onClick={closeMenu}
 								>
 									<span className="sr-only">Close menu</span>
 									<svg
