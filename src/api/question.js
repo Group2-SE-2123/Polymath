@@ -7,7 +7,9 @@ questionRouter.post("/createQuestion", async (req, res) => {
 	await prisma.question.create({
 		data: {
 			text: "1 + 1 = ?",
-			Choice: {
+			category: "Arithmetic",
+			difficulty: "Easy",
+			choice: {
 				create: [
 					{
 						text: "2",
