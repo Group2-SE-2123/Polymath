@@ -26,6 +26,11 @@ questionRouter.post("/createQuestion", async (req, res) => {
 	res.json({ success: "True" });
 });
 
+questionRouter.post("/sample", async (req, res) => {
+	const json = req.body;
+	res.send(json);
+});
+
 questionRouter.get("/getQuestions", async (req, res) => {
 	Promise.resolve()
 		.then(() => prisma.question.findMany())

@@ -11,7 +11,9 @@
 		"lint:fix": "npm run lint -- --fix",
 		"prepare": "husky install",
 		"studio": "prisma studio",
-		"migrate": "prisma migrate dev"
+		"migrate": "prisma migrate dev",
+		"test": "jest",
+		"test:watch": "jest --watch"
 	},
 	"lint-staged": {
 		"*.js": "eslint --cache --fix"
@@ -36,6 +38,7 @@
 		"@babel/node": "^7.16.0",
 		"@babel/preset-env": "^7.16.4",
 		"autoprefixer": "^10.4.0",
+		"babel-jest": "^27.4.2",
 		"babel-plugin-root-import": "^6.6.0",
 		"concurrently": "^6.4.0",
 		"eslint": "^8.2.0",
@@ -43,14 +46,17 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-import-resolver-babel-plugin-root-import": "^1.1.1",
 		"eslint-plugin-import": "^2.25.3",
+		"eslint-plugin-jest": "^25.3.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"husky": "^7.0.0",
+		"jest": "^27.4.3",
 		"lint-staged": "^12.0.2",
 		"nodemon": "^2.0.15",
 		"postcss": "^8.3.11",
 		"prettier": "^2.4.1",
 		"pretty-quick": "^3.1.2",
 		"prisma": "^3.6.0",
+		"supertest": "^6.1.6",
 		"tailwindcss": "^2.2.19"
 	}
 }
