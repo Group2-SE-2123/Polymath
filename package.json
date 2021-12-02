@@ -4,13 +4,16 @@
 	"private": true,
 	"scripts": {
 		"start": "babel-node ./src/server.js",
-		"dev": "nodemon --exec babel-node ./src/server.js",
+		"start-watch": "nodemon --exec babel-node ./src/server.js",
+		"dev": "concurrently \"npm run start-watch\" \"cd client && npm run dev\"",
 		"build": "babel src -d lib",
 		"lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.tsx .",
 		"lint:fix": "npm run lint -- --fix",
 		"prepare": "husky install",
 		"studio": "prisma studio",
-		"migrate": "prisma migrate dev"
+		"migrate": "prisma migrate dev",
+		"test": "jest",
+		"test:watch": "jest --watch"
 	},
 	"lint-staged": {
 		"*.js": "eslint --cache --fix"
@@ -22,14 +25,13 @@
 	},
 	"dependencies": {
 		"@prisma/client": "^3.5.0",
-		"alpinejs": "^3.5.2",
-		"bulma": "^0.9.3",
 		"cookie-parser": "~1.4.4",
 		"debug": "~2.6.9",
-		"ejs": "~2.6.1",
 		"express": "~4.16.1",
+		"express-validator": "^6.13.0",
 		"http-errors": "~1.6.3",
-		"morgan": "~1.9.1"
+		"morgan": "~1.9.1",
+		"ramda": "^0.27.1"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.16.0",
@@ -37,20 +39,25 @@
 		"@babel/node": "^7.16.0",
 		"@babel/preset-env": "^7.16.4",
 		"autoprefixer": "^10.4.0",
+		"babel-jest": "^27.4.2",
 		"babel-plugin-root-import": "^6.6.0",
+		"concurrently": "^6.4.0",
 		"eslint": "^8.2.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-import-resolver-babel-plugin-root-import": "^1.1.1",
 		"eslint-plugin-import": "^2.25.3",
+		"eslint-plugin-jest": "^25.3.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"husky": "^7.0.0",
+		"jest": "^27.4.3",
 		"lint-staged": "^12.0.2",
 		"nodemon": "^2.0.15",
 		"postcss": "^8.3.11",
 		"prettier": "^2.4.1",
 		"pretty-quick": "^3.1.2",
-		"prisma": "^3.5.0",
+		"prisma": "^3.6.0",
+		"supertest": "^6.1.6",
 		"tailwindcss": "^2.2.19"
 	}
 }
