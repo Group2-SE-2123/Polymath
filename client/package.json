@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@vitejs/plugin-react": "^1.1.0",
+		"daisyui": "^1.16.2",
 		"react": "^17.0.0",
 		"react-dom": "^17.0.0",
 		"react-router-dom": "^6.0.2",
