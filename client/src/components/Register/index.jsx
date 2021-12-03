@@ -1,8 +1,31 @@
-import React from "react";
-// import Logo from "../../images/Logo.svg";
-// import Icon from "../../images/Icon.svg";
+import React, { useState } from "react";
+import axios from "axios";
 
 function Register() {
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+
+	//  handle submit
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const name = `${firstName} ${lastName}`;
+		const user = {
+			name,
+			email,
+			password,
+			confirmPassword,
+		};
+		axios({
+			method: "POST",
+			data: user,
+			withCredentials: true,
+			url: "http://localhost:5000/auth/register",
+		});
+	};
+
 	return (
 		<div className="bg-gray-100 text-gray-500 w-full h-full overflow-hidden">
 			<div className="md:flex w-full">
@@ -225,6 +248,8 @@ function Register() {
 										type="text"
 										className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
 										placeholder="John"
+										value={firstName}
+										onChange={(e) => setFirstName(e.target.value)}
 									/>
 								</div>
 							</div>
@@ -240,6 +265,8 @@ function Register() {
 										type="text"
 										className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
 										placeholder="Smith"
+										value={lastName}
+										onChange={(e) => setLastName(e.target.value)}
 									/>
 								</div>
 							</div>
@@ -257,12 +284,14 @@ function Register() {
 										type="email"
 										className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
 										placeholder="johnsmith@example.com"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
 									/>
 								</div>
 							</div>
 						</div>
 						<div className="flex -mx-3">
-							<div className="w-full px-3 mb-12">
+							<div className="w-full px-3 mb-3">
 								<label htmlFor="" className="text-xs font-semibold px-1">
 									Password
 								</label>
@@ -274,13 +303,37 @@ function Register() {
 										type="password"
 										className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
 										placeholder="************"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+									/>
+								</div>
+							</div>
+						</div>
+						<div className="flex -mx-3">
+							<div className="w-full px-3 mb-12">
+								<label htmlFor="" className="text-xs font-semibold px-1">
+									Confirm Password
+								</label>
+								<div className="flex">
+									<div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
+										<i className="mdi mdi-lock-outline text-gray-400 text-lg"></i>
+									</div>
+									<input
+										type="password"
+										className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+										placeholder="************"
+										value={confirmPassword}
+										onChange={(e) => setConfirmPassword(e.target.value)}
 									/>
 								</div>
 							</div>
 						</div>
 						<div className="flex -mx-3">
 							<div className="w-full px-3 mb-5">
-								<button className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">
+								<button
+									onClick={handleSubmit}
+									className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold"
+								>
 									REGISTER NOW
 								</button>
 							</div>

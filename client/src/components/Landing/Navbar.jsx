@@ -118,9 +118,10 @@ function Header() {
 								Sign in
 							</button>
 						</Link>
-						<button
-							href="#"
-							className="
+						<Link to="/register">
+							<button
+								href="#"
+								className="
 						ml-8
 						whitespace-nowrap
 						inline-flex
@@ -137,9 +138,10 @@ function Header() {
 						border-color-linear
 						button-color-linear
 					"
-						>
-							Sign up
-						</button>
+							>
+								Sign up
+							</button>
+						</Link>
 					</div>
 				</div>
 			</div>
