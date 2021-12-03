@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import Logo from "../../images/Logo.svg";
 import Icon from "../../images/Icon.svg";
 
 import "./style.scss";
 
 function Login() {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
+	// handle submit using axios at the route http://localhost:5000/auth/login
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const data = {
+			email,
+			password,
+		};
+		axios({
+			method: "POST",
+			data,
+			withCredentials: true,
+			url: "http://localhost:5000/auth/login",
+		}).then((res) => console.log(res));
+	};
+
 	return (
 		<div className="bg-white font-family-karla h-screen">
 			<div className="w-full h-full flex flex-wrap">
@@ -20,8 +39,7 @@ function Login() {
 									Please login with your email and password
 								</p>
 							</div>
-							<form className="mt-8 space-y-6" action="#" method="POST">
-								<input type="hidden" name="remember" value="true" />
+							<form className="mt-8 space-y-6" onSubmit={handleSubmit}>
 								<div className="rounded-md shadow-sm -space-y-px">
 									<div>
 										<label htmlFor="email-address" className="sr-only">
@@ -35,6 +53,8 @@ function Login() {
 											required
 											className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 											placeholder="Email address"
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
 										/>
 									</div>
 									<div>
@@ -49,6 +69,8 @@ function Login() {
 											required
 											className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 											placeholder="Password"
+											value={password}
+											onChange={(e) => setPassword(e.target.value)}
 										/>
 									</div>
 								</div>

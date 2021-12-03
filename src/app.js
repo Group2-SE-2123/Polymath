@@ -4,7 +4,8 @@ import logger from "morgan";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
-import passportConfig from "./utils/passport-config";
+import flash from "connect-flash";
+import passportConfig from "./config/passport-config";
 
 import apiRouter from "./api";
 import authRouter from "./auth";
@@ -20,7 +21,8 @@ app.use(
 		credentials: true,
 	})
 );
-app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
+app.use(flash());
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
