@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const colors = require("tailwindcss/colors");
+const daisyui = require("daisyui");
 
 module.exports = {
 	purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
@@ -968,5 +969,5 @@ module.exports = {
 		wordBreak: ["responsive"],
 		zIndex: ["responsive", "focus-within", "focus"],
 	},
-	plugins: [],
+	plugins: [daisyui],
 };

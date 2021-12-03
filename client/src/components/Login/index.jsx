@@ -4,7 +4,7 @@ import Icon from "../../images/Icon.svg";
 
 import "./style.scss";
 
-function index() {
+function Login() {
 	return (
 		<div className="bg-white font-family-karla h-screen">
 			<div className="w-full h-full flex flex-wrap">
@@ -17,13 +17,7 @@ function index() {
 									Sign in to your account
 								</h2>
 								<p className="mt-2 text-center text-sm text-gray-600">
-									Or
-									<a
-										href="#"
-										className="font-medium text-indigo-600 hover:text-indigo-500"
-									>
-										start your 14-day free trial
-									</a>
+									Please login with your email and password
 								</p>
 							</div>
 							<form className="mt-8 space-y-6" action="#" method="POST">
@@ -78,7 +72,7 @@ function index() {
 									<div className="text-sm">
 										<a
 											href="#"
-											className="font-medium text-indigo-600 hover:text-indigo-500"
+											className="font-medium text-black-600 hover:text-black-500"
 										>
 											Forgot your password?
 										</a>
@@ -121,4 +115,4 @@ function index() {
 	);
 }
 
-export default index;
+export default Login;
