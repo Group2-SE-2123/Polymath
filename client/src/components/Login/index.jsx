@@ -8,6 +8,7 @@ import "./style.scss";
 function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	// const [userContext, setUserContext] = useContext(UserContext);
 
 	// handle submit using axios at the route http://localhost:5000/auth/login
 	const handleSubmit = (e) => {

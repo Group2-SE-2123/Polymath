@@ -5,25 +5,28 @@ import cors from "cors";
 import passport from "passport";
 import session from "express-session";
 import flash from "connect-flash";
-import passportConfig from "./config/passport-config";
+
+import passportConfig from "./strategy/passport-strategy";
+import corsConfig from "./config/cors-config";
 
 import apiRouter from "./api";
 import authRouter from "./auth";
 
+if (process.env.NODE_ENV !== "production") {
+	// eslint-disable-next-line global-require
+	require("dotenv").config();
+}
+
 const app = express();
 
+// middlewares
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(
-	cors({
-		origin: "http://localhost:3000",
-		credentials: true,
-	})
-);
+app.use(cors(corsConfig));
 app.use(flash());
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);

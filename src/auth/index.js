@@ -10,7 +10,7 @@ authRouter.post("/register", (req, res) => {
 	prisma.user
 		.findFirst({
 			where: {
-				name,
+				email,
 			},
 		})
 		.then((user) => {
@@ -35,13 +35,16 @@ authRouter.post("/register", (req, res) => {
 });
 
 authRouter.post("/login", (req, res, next) => {
-	passport.authenticate("local", (err, user) => {
+	passport.authenticate("local", (err, user, info) => {
 		if (err) throw err;
-		if (!user) res.send("No User Exists");
-		else {
+		if (!user) {
+			res.send(info);
+		} else {
 			req.logIn(user, (error) => {
 				if (error) throw error;
-				res.send("Successfully Authenticated");
+				res.send({
+					message: "success",
+				});
 			});
 		}
 	})(req, res, next);
