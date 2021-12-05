@@ -6,7 +6,8 @@ import passport from "passport";
 import session from "express-session";
 import flash from "connect-flash";
 
-import passportConfig from "./strategy/passport-strategy";
+import passportStrategy from "./strategy/passport-strategy";
+import jwtStrategy from "./strategy/jwt-strategy";
 import corsConfig from "./config/cors-config";
 
 import apiRouter from "./api";
@@ -29,7 +30,8 @@ app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUniniti
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
-passportConfig(passport);
+passportStrategy(passport);
+jwtStrategy(passport);
 
 // apis
 app.use("/api", apiRouter);

@@ -3,10 +3,17 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import prisma from "~/prisma/db";
 
+import { getToken, getRefreshToken } from "./authenticate";
+
 const authRouter = express.Router();
 
 authRouter.post("/register", (req, res) => {
 	const { name, email, password } = req.body;
+	if (!name || !email || !password) {
+		res.status(400).json({
+			message: "Please provide all the required fields",
+		});
+	}
 	prisma.user
 		.findFirst({
 			where: {
@@ -15,7 +22,7 @@ authRouter.post("/register", (req, res) => {
 		})
 		.then((user) => {
 			if (user) {
-				res.send("User Already Exists");
+				res.status(409).send("User Already Exists");
 			} else {
 				const saltRounds = +process.env.SALT_ROUNDS;
 				const hashedPassword = bcrypt.hashSync(password, saltRounds);
@@ -27,8 +34,14 @@ authRouter.post("/register", (req, res) => {
 							password: hashedPassword,
 						},
 					})
-					.then(() => {
-						res.send("User Created");
+					.then((newUser) => {
+						const token = getToken({ id: newUser.id });
+						const refreshToken = getRefreshToken({ id: newUser.id });
+						res.cookie("refreshToken", refreshToken);
+						res.send({ success: true, token });
+					})
+					.catch((err) => {
+						res.status(500).json(err);
 					});
 			}
 		});
