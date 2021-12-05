@@ -11,14 +11,22 @@ datasource db {
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  name     String
-  email    String?
-  password String?
-  isAdmin  Boolean    @default(false)
-  score    Score[]
-  quiz     Quiz[]
-  question Question[]
+  id           Int        @id @default(autoincrement())
+  name         String
+  email        String?
+  password     String?
+  isAdmin      Boolean    @default(false)
+  refreshToken Session[]
+  score        Score[]
+  quiz         Quiz[]
+  question     Question[]
+}
+
+model Session {
+  id           Int    @id @default(autoincrement())
+  refreshToken String
+  User         User?  @relation(fields: [userId], references: [id])
+  userId       Int?
 }
 
 model Score {
@@ -58,10 +66,3 @@ model Choice {
   questionId Int
   question   Question @relation(fields: [questionId], references: [id])
 }
-
-// user x
-// user_details x
-// score x
-// quiz x
-// question x
-// choice x
