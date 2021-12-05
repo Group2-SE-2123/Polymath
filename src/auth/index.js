@@ -5,9 +5,9 @@ import prisma from "~/prisma/db";
 
 import { getToken, getRefreshToken } from "./authenticate";
 
-const authRouter = express.Router();
+const router = express.Router();
 
-authRouter.post("/register", (req, res) => {
+router.post("/register", (req, res) => {
 	const { name, email, password } = req.body;
 	if (!name || !email || !password) {
 		res.status(400).json({
@@ -47,7 +47,7 @@ authRouter.post("/register", (req, res) => {
 		});
 });
 
-authRouter.post("/login", (req, res, next) => {
+router.post("/login", (req, res, next) => {
 	passport.authenticate("local", (err, user, info) => {
 		if (err) throw err;
 		if (!user) {
@@ -55,12 +55,13 @@ authRouter.post("/login", (req, res, next) => {
 		} else {
 			req.logIn(user, (error) => {
 				if (error) throw error;
-				res.send({
-					message: "success",
-				});
+				const token = getToken({ id: user.id });
+				const refreshToken = getRefreshToken({ id: user.id });
+				res.cookie("refreshToken", refreshToken);
+				res.send({ success: true, token });
 			});
 		}
 	})(req, res, next);
 });
 
-export default authRouter;
+export default router;

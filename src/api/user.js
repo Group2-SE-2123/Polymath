@@ -1,9 +1,9 @@
 import express from "express";
 import prisma from "~/prisma/db";
 
-const userRouter = express.Router();
+const router = express.Router();
 
-userRouter.post("/createUser", async (req, res) => {
+router.post("/createUser", async (req, res) => {
 	const { name } = req.body;
 	prisma.user
 		.create({
@@ -15,11 +15,11 @@ userRouter.post("/createUser", async (req, res) => {
 		.catch((err) => res.send(err));
 });
 
-userRouter.get("/getUsers", async (req, res) => {
+router.get("/getUsers", async (req, res) => {
 	prisma.user
 		.findMany()
 		.then((user) => res.send(user))
 		.catch((err) => res.send(err));
 });
 
-export default userRouter;
+export default router;

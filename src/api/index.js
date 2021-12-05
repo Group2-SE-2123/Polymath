@@ -2,9 +2,9 @@ import express from "express";
 import questionRouter from "./question";
 import userRouter from "./user";
 
-const apiRouter = express.Router();
+const router = express.Router();
 
-apiRouter.use("/question", questionRouter);
-apiRouter.use("/user", userRouter);
+router.use("/question", questionRouter);
+router.use("/user", userRouter);
 
-export default apiRouter;
+export default router;
