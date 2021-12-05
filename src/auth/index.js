@@ -7,44 +7,45 @@ import { getToken, getRefreshToken } from "./authenticate";
 
 const router = express.Router();
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
 	const { name, email, password } = req.body;
 	if (!name || !email || !password) {
 		res.status(400).json({
 			message: "Please provide all the required fields",
 		});
 	}
-	prisma.user
-		.findFirst({
-			where: {
-				email,
+	const user = await prisma.user.findFirst({
+		where: {
+			email,
+		},
+	});
+	if (user) {
+		res.status(409).send("User Already Exists");
+	}
+	const saltRounds = +process.env.SALT_ROUNDS;
+	const hashedPassword = bcrypt.hashSync(password, saltRounds);
+	const newUser = await prisma.user.create({
+		data: {
+			name,
+			email,
+			password: hashedPassword,
+		},
+	});
+	const token = getToken({ id: newUser.id });
+	const refreshToken = getRefreshToken({ id: newUser.id });
+	await prisma.session.create({
+		data: {
+			user: {
+				connect: {
+					id: newUser.id,
+				},
 			},
-		})
-		.then((user) => {
-			if (user) {
-				res.status(409).send("User Already Exists");
-			} else {
-				const saltRounds = +process.env.SALT_ROUNDS;
-				const hashedPassword = bcrypt.hashSync(password, saltRounds);
-				prisma.user
-					.create({
-						data: {
-							name,
-							email,
-							password: hashedPassword,
-						},
-					})
-					.then((newUser) => {
-						const token = getToken({ id: newUser.id });
-						const refreshToken = getRefreshToken({ id: newUser.id });
-						res.cookie("refreshToken", refreshToken);
-						res.send({ success: true, token });
-					})
-					.catch((err) => {
-						res.status(500).json(err);
-					});
-			}
-		});
+			refreshToken,
+		},
+	});
+
+	res.cookie("refreshToken", refreshToken);
+	res.send({ success: true, token });
 });
 
 router.post("/login", (req, res, next) => {
