@@ -60,11 +60,10 @@ const updateSession = async (id, token) => {
 	});
 };
 
-const deleteSession = async (id, userId) => {
+const deleteSession = async (id) => {
 	return prisma.session.delete({
 		where: {
 			id,
-			userId,
 		},
 	});
 };

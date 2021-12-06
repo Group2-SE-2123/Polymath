@@ -7,8 +7,8 @@ opts.secretOrKey = process.env.JWT_SECRET;
 
 export default function jwtStrategy(passport) {
 	passport.use(
-		new JwtStrategy(opts, (jwtPayload, done) => {
-			prisma.user
+		new JwtStrategy(opts, async (jwtPayload, done) => {
+			await prisma.user
 				.findFirst({
 					where: {
 						id: jwtPayload.id,

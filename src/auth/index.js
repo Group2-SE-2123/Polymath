@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import prisma from "~/prisma/db";
 
-import { getToken, COOKIE_OPTIONS, getRefreshToken, verifyUser } from "./authenticate";
+import { getToken, COOKIE_OPTIONS, getRefreshToken } from "./authenticate";
 import userRouter from "./userRoute";
 
 const router = express.Router();
@@ -79,8 +79,16 @@ router.post("/login", (req, res, next) => {
 
 router.use("/", userRouter);
 
-router.get("/me", verifyUser, (req, res) => {
-	res.send(req.user);
+router.get("/me", async (req, res, next) => {
+	passport.authenticate(
+		"jwt",
+		{
+			session: false,
+		},
+		() => {
+			res.send(req.user);
+		}
+	)(req, res, next);
 });
 
 export default router;
