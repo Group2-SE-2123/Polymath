@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import prisma from "~/prisma/db";
 
-import { getToken, getRefreshToken } from "./authenticate";
+import { getToken, COOKIE_OPTIONS, getRefreshToken } from "./authenticate";
+import refreshRouter from "./refreshToken";
 
 const router = express.Router();
 
@@ -44,7 +45,7 @@ router.post("/register", async (req, res) => {
 		},
 	});
 
-	res.cookie("refreshToken", refreshToken);
+	res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
 	res.send({ success: true, token });
 });
 
@@ -54,15 +55,28 @@ router.post("/login", (req, res, next) => {
 		if (!user) {
 			res.send(info);
 		} else {
-			req.logIn(user, (error) => {
+			req.logIn(user, async (error) => {
 				if (error) throw error;
 				const token = getToken({ id: user.id });
 				const refreshToken = getRefreshToken({ id: user.id });
-				res.cookie("refreshToken", refreshToken);
+				await prisma.session.create({
+					data: {
+						user: {
+							connect: {
+								id: user.id,
+							},
+						},
+						refreshToken,
+					},
+				});
+
+				res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
 				res.send({ success: true, token });
 			});
 		}
 	})(req, res, next);
 });
+
+router.use("/", refreshRouter);
 
 export default router;

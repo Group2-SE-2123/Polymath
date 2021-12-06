@@ -8,7 +8,6 @@ export const COOKIE_OPTIONS = {
 	secure: !dev,
 	signed: true,
 	maxAge: +process.env.REFRESH_TOKEN_EXPIRY * 1000,
-	sameSite: "none",
 };
 
 export const getToken = (user) => {

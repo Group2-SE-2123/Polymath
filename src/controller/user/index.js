@@ -1,7 +1,7 @@
 import prisma from "~/prisma/db";
 
 const createUser = (userDetails) => {
-	prisma.user.create({
+	return prisma.user.create({
 		data: {
 			...userDetails,
 		},
@@ -9,7 +9,7 @@ const createUser = (userDetails) => {
 };
 
 const addRefreshToken = (id, token) => {
-	prisma.user.update({
+	return prisma.user.update({
 		where: { id },
 		data: {
 			refreshToken: {
@@ -19,4 +19,44 @@ const addRefreshToken = (id, token) => {
 	});
 };
 
-export { addRefreshToken, createUser };
+const getLatestSession = async (id) => {
+	return prisma.user.findFirst({
+		where: {
+			id,
+		},
+		select: {
+			session: {
+				orderBy: {
+					createdAt: "asc",
+				},
+				take: 1,
+			},
+		},
+	});
+};
+
+const getSameToken = async (token) => {
+	return prisma.session
+		.findFirst({
+			where: {
+				refreshToken: token,
+			},
+		})
+		.then((session) => {
+			return session.id;
+		});
+};
+
+const updateSession = async (id, token) => {
+	const latestSession = await getLatestSession(id);
+	return prisma.session.update({
+		where: {
+			id: latestSession.session[0].id,
+		},
+		data: {
+			refreshToken: token,
+		},
+	});
+};
+
+export { addRefreshToken, createUser, getLatestSession, getSameToken, updateSession };

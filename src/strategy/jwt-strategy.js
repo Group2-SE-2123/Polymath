@@ -5,7 +5,7 @@ const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_SECRET;
 
-export default function jstStrategy(passport) {
+export default function jwtStrategy(passport) {
 	passport.use(
 		new JwtStrategy(opts, (jwtPayload, done) => {
 			prisma.user
