@@ -27,7 +27,7 @@ const getLatestSession = async (id) => {
 		select: {
 			session: {
 				orderBy: {
-					createdAt: "asc",
+					createdAt: "desc",
 				},
 				take: 1,
 			},
@@ -55,8 +55,25 @@ const updateSession = async (id, token) => {
 		},
 		data: {
 			refreshToken: token,
+			createdAt: new Date(),
 		},
 	});
 };
 
-export { addRefreshToken, createUser, getLatestSession, getSameToken, updateSession };
+const deleteSession = async (id, userId) => {
+	return prisma.session.delete({
+		where: {
+			id,
+			userId,
+		},
+	});
+};
+
+export {
+	addRefreshToken,
+	createUser,
+	getLatestSession,
+	getSameToken,
+	updateSession,
+	deleteSession,
+};
