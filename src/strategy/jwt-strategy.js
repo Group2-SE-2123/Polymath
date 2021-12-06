@@ -13,6 +13,12 @@ export default function jwtStrategy(passport) {
 					where: {
 						id: jwtPayload.id,
 					},
+					select: {
+						id: true,
+						email: true,
+						name: true,
+						isAdmin: true,
+					},
 				})
 				.then((user) => {
 					if (!user) {

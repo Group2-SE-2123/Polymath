@@ -53,36 +53,25 @@ router.post("/refreshToken", (req, res, next) => {
 	}
 });
 
-router.get("/logout", async (req, res, next) => {
-	passport.authenticate(
-		"jwt",
-		{
-			session: false,
-		},
-		() => {
-			const { signedCookies = {} } = req;
-			const { refreshToken } = signedCookies;
-			prisma.user
-				.findFirst({
-					where: {
-						id: req.user.id,
-					},
-				})
-				.then(
-					async () => {
-						const tokenIndex = await getSameToken(refreshToken);
+router.get("/logout", passport.authenticate("jwt", { session: false }), (req, res) => {
+	const { signedCookies = {} } = req;
+	const { refreshToken } = signedCookies;
+	prisma.user
+		.findFirst({
+			where: {
+				id: req.user.id,
+			},
+		})
+		.then(async () => {
+			const tokenIndex = await getSameToken(refreshToken);
 
-						if (tokenIndex) {
-							await deleteSession(tokenIndex);
-							res.clearCookie("refreshToken", COOKIE_OPTIONS);
-							req.logout();
-							res.send({ success: true });
-						}
-					},
-					(err) => next(err)
-				);
-		}
-	)(req, res, next);
+			if (tokenIndex) {
+				await deleteSession(tokenIndex);
+				res.clearCookie("refreshToken", COOKIE_OPTIONS);
+				req.logout();
+				res.send({ success: true });
+			}
+		});
 });
 
 export default router;

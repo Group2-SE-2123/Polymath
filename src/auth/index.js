@@ -49,46 +49,36 @@ router.post("/register", async (req, res) => {
 	res.send({ success: true, token });
 });
 
-router.post("/login", (req, res, next) => {
-	passport.authenticate("local", (err, user, info) => {
-		if (err) throw err;
-		if (!user) {
-			res.send(info);
-		} else {
-			req.logIn(user, async (error) => {
-				if (error) throw error;
-				const token = getToken({ id: user.id });
-				const refreshToken = getRefreshToken({ id: user.id });
-				await prisma.session.create({
-					data: {
-						user: {
-							connect: {
-								id: user.id,
-							},
+router.post("/login", passport.authenticate("local"), (req, res) => {
+	const { user } = req;
+	if (!user) {
+		res.status(401).send("Unauthorized");
+	} else {
+		req.logIn(user, async (error) => {
+			if (error) throw error;
+			const token = getToken({ id: user.id });
+			const refreshToken = getRefreshToken({ id: user.id });
+			await prisma.session.create({
+				data: {
+					user: {
+						connect: {
+							id: user.id,
 						},
-						refreshToken,
 					},
-				});
-
-				res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
-				res.send({ success: true, token });
+					refreshToken,
+				},
 			});
-		}
-	})(req, res, next);
+
+			res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
+			res.send({ success: true, token });
+		});
+	}
 });
 
 router.use("/", userRouter);
 
-router.get("/me", async (req, res, next) => {
-	passport.authenticate(
-		"jwt",
-		{
-			session: false,
-		},
-		() => {
-			res.send(req.user);
-		}
-	)(req, res, next);
+router.get("/me", passport.authenticate("jwt", { session: false }), (req, res) => {
+	res.send(req.user);
 });
 
 export default router;
