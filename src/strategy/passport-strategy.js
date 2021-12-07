@@ -30,6 +30,9 @@ export default function passportStrategy(passport) {
 							isAdmin: user.isAdmin,
 						};
 						return done(null, userDetails);
+					})
+					.catch((err) => {
+						done(err);
 					});
 			}
 		)

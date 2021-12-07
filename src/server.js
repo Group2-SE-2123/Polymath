@@ -83,6 +83,10 @@ function onListening() {
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, () => {
+	// eslint-disable-next-line no-console
+	console.log(`Example app listening at http://localhost:${port}`);
+});
+
 server.on("error", onError);
 server.on("listening", onListening);

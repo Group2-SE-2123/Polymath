@@ -23,4 +23,6 @@ export const getRefreshToken = (user) => {
 	return refreshToken;
 };
 
+export const loginUser = passport.authenticate("local", { session: false });
+
 export const verifyUser = passport.authenticate("jwt", { session: false });

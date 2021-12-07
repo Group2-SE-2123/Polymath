@@ -1,28 +1,40 @@
 import React, { useState } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
+
 import Logo from "../../images/Logo.svg";
 import Icon from "../../images/Icon.svg";
-
 import "./style.scss";
 
 function Login() {
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	// const [userContext, setUserContext] = useContext(UserContext);
 
-	// handle submit using axios at the route http://localhost:5000/auth/login
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		setIsSubmitting(true);
+		setEmail("");
+		setPassword("");
 		const data = {
 			email,
 			password,
 		};
+
 		axios({
 			method: "POST",
 			data,
 			withCredentials: true,
 			url: "/auth/login",
-		}).then((res) => console.log(res));
+		})
+			.then((res) => {
+				setIsSubmitting(false);
+				console.log(res);
+			})
+			.catch((err) => {
+				setIsSubmitting(false);
+				console.log(err);
+			});
 	};
 
 	return (
@@ -97,27 +109,7 @@ function Login() {
 								</div>
 
 								<div>
-									<button
-										type="submit"
-										className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-									>
-										<span className="absolute left-0 inset-y-0 flex items-center pl-3">
-											<svg
-												className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 20 20"
-												fill="currentColor"
-												aria-hidden="true"
-											>
-												<path
-													fillRule="evenodd"
-													d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-													clipRule="evenodd"
-												/>
-											</svg>
-										</span>
-										Sign in
-									</button>
+									<LoginButton isSubmitting={isSubmitting} />
 								</div>
 							</form>
 						</div>
@@ -131,5 +123,59 @@ function Login() {
 		</div>
 	);
 }
+
+const LoginButton = (props) => {
+	const { isSubmitting } = props;
+	const ChosenIcon = isSubmitting ? <SpinnerIcon /> : <LockIcon />;
+	return (
+		<button
+			disabled={isSubmitting}
+			type="submit"
+			className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+		>
+			<span className="absolute left-0 inset-y-0 flex items-center pl-3">{ChosenIcon}</span>
+			Sign in
+		</button>
+	);
+};
+
+const SpinnerIcon = () => {
+	return (
+		<svg
+			className="animate-spin w-5 h-5 mx-1"
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 20 20"
+			fill="currentColor"
+		>
+			<path
+				fillRule="evenodd"
+				d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+				clipRule="evenodd"
+			/>
+		</svg>
+	);
+};
+
+const LockIcon = () => {
+	return (
+		<svg
+			className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 20 20"
+			fill="currentColor"
+			aria-hidden="true"
+		>
+			<path
+				fillRule="evenodd"
+				d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+				clipRule="evenodd"
+			/>
+		</svg>
+	);
+};
+
+LoginButton.propTypes = {
+	isSubmitting: PropTypes.bool.isRequired,
+};
 
 export default Login;

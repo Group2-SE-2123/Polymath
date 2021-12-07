@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import prisma from "~/prisma/db";
 
-import { getToken, COOKIE_OPTIONS, getRefreshToken } from "./authenticate";
+import { getToken, COOKIE_OPTIONS, getRefreshToken, loginUser } from "./authenticate";
+import { createSession } from "../controller/session";
 import userRouter from "./userRoute";
 
 const router = express.Router();
@@ -49,25 +50,16 @@ router.post("/register", async (req, res) => {
 	res.send({ success: true, token });
 });
 
-router.post("/login", passport.authenticate("local"), (req, res) => {
+router.post("/login", loginUser, (req, res) => {
 	const { user } = req;
 	if (!user) {
-		res.status(401).send("Unauthorized");
+		res.status(401).send("User does not exist");
 	} else {
 		req.logIn(user, async (error) => {
 			if (error) throw error;
 			const token = getToken({ id: user.id });
 			const refreshToken = getRefreshToken({ id: user.id });
-			await prisma.session.create({
-				data: {
-					user: {
-						connect: {
-							id: user.id,
-						},
-					},
-					refreshToken,
-				},
-			});
+			await createSession(user.id, refreshToken);
 
 			res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
 			res.send({ success: true, token });
