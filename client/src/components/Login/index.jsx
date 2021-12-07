@@ -21,7 +21,7 @@ function Login() {
 			method: "POST",
 			data,
 			withCredentials: true,
-			url: "http://localhost:5000/auth/login",
+			url: "/auth/login",
 		}).then((res) => console.log(res));
 	};
 

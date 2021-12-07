@@ -22,7 +22,7 @@ function Register() {
 			method: "POST",
 			data: user,
 			withCredentials: true,
-			url: "http://localhost:5000/auth/register",
+			url: "/auth/register",
 		});
 	};
 
