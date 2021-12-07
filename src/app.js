@@ -5,6 +5,8 @@ import cors from "cors";
 import passport from "passport";
 import session from "express-session";
 import flash from "connect-flash";
+import path from "path";
+import dotenv from "dotenv";
 
 import passportStrategy from "./strategy/passport-strategy";
 import jwtStrategy from "./strategy/jwt-strategy";
@@ -13,12 +15,8 @@ import corsConfig from "./config/cors-config";
 import apiRouter from "./api";
 import authRouter from "./auth";
 
-if (process.env.NODE_ENV !== "production") {
-	// eslint-disable-next-line global-require
-	require("dotenv").config();
-}
-
 const app = express();
+dotenv.config();
 
 // middlewares
 app.use(logger("dev"));
@@ -37,9 +35,13 @@ jwtStrategy(passport);
 app.use("/api", apiRouter);
 app.use("/auth", authRouter);
 
-// error handler
-app.get("*", (req, res) => {
-	res.status(404).send("error");
-});
+// dev/prod cases
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static("client/dist"));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+	});
+}
 
 export default app;
