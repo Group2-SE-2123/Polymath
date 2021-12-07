@@ -1,14 +1,7 @@
 {
 	"extends": ["airbnb-base", "plugin:prettier/recommended"],
 	"plugins": ["prettier", "jest"],
-	"rules": {
-		"prettier/prettier": [
-			"error",
-			{
-				"endOfLine": "auto"
-			}
-		]
-	},
+	"rules": {},
 	"settings": {
 		"import/resolver": "babel-plugin-root-import"
 	},
