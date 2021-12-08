@@ -1,7 +1,7 @@
 import prisma from "~/prisma/db";
 
 const createSession = async (id, refreshToken) => {
-	prisma.session.create({
+	return prisma.session.create({
 		data: {
 			user: {
 				connect: {

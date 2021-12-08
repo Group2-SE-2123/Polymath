@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 import Logo from "../../images/Logo.svg";
 import Icon from "../../images/Icon.svg";
+import { UserContext } from "../../context/UserContext";
 import "./style.scss";
 
 function Login() {
+	const [error, setError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [, setUserContext] = useContext(UserContext);
+
+	const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -27,100 +33,117 @@ function Login() {
 			withCredentials: true,
 			url: "/auth/login",
 		})
-			.then((res) => {
+			.then(async (res) => {
 				setIsSubmitting(false);
-				console.log(res);
+				if (res.status !== 200) {
+					if (res.status === 400) {
+						setError("Please fill all the fields correctly!");
+					} else if (res.status === 401) {
+						setError("Invalid email and password combination.");
+					} else {
+						setError("Something went wrong");
+					}
+				} else {
+					setUserContext((oldValues) => {
+						return { ...oldValues, token: res.data.token };
+					});
+					navigate("/dashboard", { replace: true });
+				}
 			})
-			.catch((err) => {
+			.catch(() => {
 				setIsSubmitting(false);
-				console.log(err);
+				setError("Something went wrong with error");
 			});
 	};
 
 	return (
-		<div className="bg-white font-family-karla h-screen">
-			<div className="w-full h-full flex flex-wrap">
-				<div className="w-full md:w-2/3 lg:w-1/2 flex flex-col">
-					<div className="flex flex-col justify-center md:justify-start pt-0 md:pt-8 px-8 sm:px-40 md:px-10 lg:px-20">
-						<div className="max-w-md w-full space-y-8">
-							<div>
-								<img className="mx-auto h-20 w-auto" src={Logo} alt="Workflow" />
-								<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-									Sign in to your account
-								</h2>
-								<p className="mt-2 text-center text-sm text-gray-600">
-									Please login with your email and password
-								</p>
-							</div>
-							<form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-								<div className="rounded-md shadow-sm -space-y-px">
-									<div>
-										<label htmlFor="email-address" className="sr-only">
-											Email address
-										</label>
-										<input
-											id="email-address"
-											name="email"
-											type="email"
-											autoComplete="email"
-											required
-											className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-											placeholder="Email address"
-											value={email}
-											onChange={(e) => setEmail(e.target.value)}
-										/>
-									</div>
-									<div>
-										<label htmlFor="password" className="sr-only">
-											Password
-										</label>
-										<input
-											id="password"
-											name="password"
-											type="password"
-											autoComplete="current-password"
-											required
-											className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-											placeholder="Password"
-											value={password}
-											onChange={(e) => setPassword(e.target.value)}
-										/>
-									</div>
-								</div>
+		<>
+			{error && <div intent="danger">{error}</div>}
 
-								<div className="flex items-center justify-between">
-									<div className="flex items-center">
-										<input
-											id="remember-me"
-											name="remember-me"
-											type="checkbox"
-											className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-										/>
-										<label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-											Remember me
-										</label>
-									</div>
-
-									<div className="text-sm">
-										<a href="#" className="font-medium text-black-600 hover:text-black-500">
-											Forgot your password?
-										</a>
-									</div>
-								</div>
-
+			<div className="bg-white font-family-karla h-screen">
+				<div className="w-full h-full flex flex-wrap">
+					<div className="w-full md:w-2/3 lg:w-1/2 flex flex-col">
+						<div className="flex flex-col justify-center md:justify-start pt-0 md:pt-8 px-8 sm:px-40 md:px-10 lg:px-20">
+							<div className="max-w-md w-full space-y-8">
 								<div>
-									<LoginButton isSubmitting={isSubmitting} />
+									<img className="mx-auto h-20 w-auto" src={Logo} alt="Workflow" />
+									<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+										Sign in to your account
+									</h2>
+									<p className="mt-2 text-center text-sm text-gray-600">
+										Please login with your email and password
+									</p>
 								</div>
-							</form>
+								<form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+									<div className="rounded-md shadow-sm -space-y-px">
+										<div>
+											<label htmlFor="email-address" className="sr-only">
+												Email address
+											</label>
+											<input
+												id="email-address"
+												name="email"
+												type="email"
+												autoComplete="email"
+												required
+												className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+												placeholder="Email address"
+												value={email}
+												onChange={(e) => setEmail(e.target.value)}
+											/>
+										</div>
+										<div>
+											<label htmlFor="password" className="sr-only">
+												Password
+											</label>
+											<input
+												id="password"
+												name="password"
+												type="password"
+												autoComplete="current-password"
+												required
+												className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+												placeholder="Password"
+												value={password}
+												onChange={(e) => setPassword(e.target.value)}
+											/>
+										</div>
+									</div>
+
+									<div className="flex items-center justify-between">
+										<div className="flex items-center">
+											<input
+												id="remember-me"
+												name="remember-me"
+												type="checkbox"
+												className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+											/>
+											<label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+												Remember me
+											</label>
+										</div>
+
+										<div className="text-sm">
+											<a href="#" className="font-medium text-black-600 hover:text-black-500">
+												Forgot your password?
+											</a>
+										</div>
+									</div>
+
+									<div>
+										<LoginButton isSubmitting={isSubmitting} />
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div className="md:w-1/3 lg:w-1/2 flex">
-					<img className="hidden md:flex m-auto h-60 lg:h-96" src={Icon} />
+					<div className="md:w-1/3 lg:w-1/2 flex">
+						<img className="hidden md:flex m-auto h-60 lg:h-96" src={Icon} />
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 
