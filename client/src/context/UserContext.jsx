@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
+
+import useLocalStorage from "../../hook/useLocalStorage";
 
 const UserContext = React.createContext([{}, () => {}]);
 
-const initialState = {};
-
 const UserProvider = ({ children }) => {
-	const [state, setState] = useState(initialState);
+	const [state, setState] = useLocalStorage("token", null);
 
 	return <UserContext.Provider value={[state, setState]}>{children}</UserContext.Provider>;
 };
