@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App";
 
 import { UserProvider } from "./context/UserContext";
+import { GlobalProvider } from "./context/GlobalContext";
 import "./config/axiosConfig";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<UserProvider>
-			<App />
-		</UserProvider>
+		<GlobalProvider>
+			<UserProvider>
+				<App />
+			</UserProvider>
+		</GlobalProvider>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

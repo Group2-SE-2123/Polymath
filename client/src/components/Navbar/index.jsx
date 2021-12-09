@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
@@ -6,15 +6,16 @@ import PropTypes from "prop-types";
 
 import Logo from "../../images/Logo.svg";
 import { UserContext } from "../../context/UserContext";
+import { GlobalContext } from "../../context/GlobalContext";
 
 function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
-	const [userDetails, setUserDetails] = useState({});
 	const [userContext] = useContext(UserContext);
+	const [globalContext, setGlobalContext] = useContext(GlobalContext);
 	const openMenu = () => setIsOpen(true);
 	const closeMenu = () => setIsOpen(false);
 
-	const getUser = () => {
+	const getUser = useCallback(() => {
 		axios({
 			method: "GET",
 			withCredentials: true,
@@ -23,15 +24,23 @@ function Navbar() {
 				Authorization: `Bearer ${userContext}`,
 			},
 		}).then((res) => {
-			console.log(res);
+			if (res.status === 200) {
+				setGlobalContext((prevState) => {
+					return { ...prevState, user: res.data };
+				});
+			} else {
+				setGlobalContext((prevState) => {
+					return { ...prevState, user: null };
+				});
+			}
 		});
-	};
+	}, [setGlobalContext, userContext]);
 
 	useEffect(() => {
-		if (Object.keys(userDetails).length === 0) {
+		if (!globalContext.user) {
 			getUser();
 		}
-	}, [userDetails, setUserDetails]);
+	}, []);
 
 	return (
 		<div className="relative bg-white">
@@ -130,7 +139,7 @@ function Navbar() {
 						</a>
 					</nav>
 					<div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-						{!userContext ? <NoAuth /> : <Auth value={userDetails} />}
+						{!globalContext.user ? <NoAuth /> : <Auth user={globalContext.user} />}
 					</div>
 				</div>
 			</div>
@@ -403,17 +412,18 @@ const NoAuth = () => {
 	);
 };
 
-const Auth = ({ name }) => {
+const Auth = ({ user }) => {
+	const { name } = user;
 	return (
 		<>
 			<FaUserAlt color="#FCC822" />
-			{name}
+			<h1>{name}</h1>
 		</>
 	);
 };
 
 Auth.propTypes = {
-	name: PropTypes.string.isRequired,
+	user: PropTypes.obj,
 };
 
 export default Navbar;
