@@ -44,9 +44,7 @@ function Login() {
 						setError("Something went wrong");
 					}
 				} else {
-					setUserContext((oldValues) => {
-						return { ...oldValues, token: res.data.token };
-					});
+					setUserContext(() => res.data.token);
 					navigate("/dashboard", { replace: true });
 				}
 			})

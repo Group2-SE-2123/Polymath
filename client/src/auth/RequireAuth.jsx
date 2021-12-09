@@ -8,7 +8,7 @@ const RequireAuth = ({ children }) => {
 	const location = useLocation();
 	const [userContext] = useContext(UserContext);
 
-	if (!userContext.token) {
+	if (!userContext) {
 		return <Navigate to="/login" state={{ from: location }} />;
 	}
 
