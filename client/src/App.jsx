@@ -7,6 +7,8 @@ import Landing from "./components/Landing";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
+import Quiz from "./components/Quiz";
+import NotFound from "./components/NotFound";
 
 function App() {
 	return (
@@ -23,6 +25,8 @@ function App() {
 						</RequireAuth>
 					}
 				></Route>
+				<Route path="/quiz" element={<Quiz />}></Route>
+				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
 	);
