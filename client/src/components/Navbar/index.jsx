@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 import Logo from "../../images/Logo.svg";
 import { UserContext } from "../../context/UserContext";
 import { GlobalContext } from "../../context/GlobalContext";
+import WhiteDropdown from "../Dropdowns/WhiteDropdown";
+import "./style.scss";
 
 function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -372,7 +374,6 @@ const NoAuth = () => {
 		<>
 			<Link to="/login">
 				<button
-					href="#"
 					className="
     whitespace-nowrap
     text-base
@@ -386,7 +387,6 @@ const NoAuth = () => {
 			</Link>
 			<Link to="/register">
 				<button
-					href="#"
 					className="
     ml-8
     whitespace-nowrap
@@ -417,13 +417,15 @@ const Auth = ({ user }) => {
 	return (
 		<>
 			<FaUserAlt color="#FCC822" />
-			<h1>{name}</h1>
+			<h1 className="name-text ml-3">{name}</h1>
+			<WhiteDropdown />
 		</>
 	);
 };
 
 Auth.propTypes = {
-	user: PropTypes.obj,
+	user: PropTypes.object,
+	name: PropTypes.string,
 };
 
 export default Navbar;
