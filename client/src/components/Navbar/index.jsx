@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
@@ -17,7 +17,7 @@ function Navbar() {
 	const openMenu = () => setIsOpen(true);
 	const closeMenu = () => setIsOpen(false);
 
-	const getUser = useCallback(() => {
+	const getUser = () => {
 		axios({
 			method: "GET",
 			withCredentials: true,
@@ -36,7 +36,7 @@ function Navbar() {
 				});
 			}
 		});
-	}, [setGlobalContext, userContext]);
+	};
 
 	useEffect(() => {
 		if (!globalContext.user) {

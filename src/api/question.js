@@ -1,10 +1,12 @@
 import express from "express";
 import prisma from "~/prisma/db";
 
+import { getAllQuestions } from "../controller/question";
+
 const router = express.Router();
 
-router.post("/createQuestion", async (req, res) => {
-	await prisma.question.create({
+router.post("/createQuestion", (req, res) => {
+	prisma.question.create({
 		data: {
 			text: "1 + 1 = ?",
 			category: "Arithmetic",
@@ -28,16 +30,10 @@ router.post("/createQuestion", async (req, res) => {
 	res.json({ success: "True" });
 });
 
-router.post("/sample", async (req, res) => {
-	const json = req.body;
-	res.send(json);
-});
-
-router.get("/getQuestions", async (req, res) => {
-	Promise.resolve()
-		.then(() => prisma.question.findMany())
+router.get("/getQuestions", (req, res) => {
+	getAllQuestions()
 		.then((questions) => res.send(questions))
-		.catch((err) => res.send(err));
+		.catch((err) => res.status(400).send(err));
 });
 
 export default router;
