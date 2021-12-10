@@ -12,4 +12,18 @@ const getQuestionById = (id) => {
 	});
 };
 
-export { getAllQuestions, getQuestionById };
+const createQuestion = (question) => {
+	const { text, category, difficulty, choices } = question;
+	return prisma.question.create({
+		data: {
+			text,
+			category,
+			difficulty,
+			choice: {
+				create: choices,
+			},
+		},
+	});
+};
+
+export { getAllQuestions, getQuestionById, createQuestion };
