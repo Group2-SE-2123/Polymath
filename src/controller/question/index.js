@@ -40,4 +40,17 @@ const deleteQuestion = (id) => {
 	});
 };
 
-export { getAllQuestions, getQuestionById, createQuestion, deleteQuestion };
+const getRandomQuestions = async (count) => {
+	const totalCount = await prisma.question.count();
+	const skip = Math.floor(Math.random() * totalCount);
+
+	return prisma.question.findMany({
+		take: count,
+		skip,
+		orderBy: {
+			id: "desc",
+		},
+	});
+};
+
+export { getAllQuestions, getQuestionById, createQuestion, deleteQuestion, getRandomQuestions };

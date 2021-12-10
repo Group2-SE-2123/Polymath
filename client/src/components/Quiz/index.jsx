@@ -1,13 +1,32 @@
 import { Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useTimeoutFn } from "react-use";
+import axios from "axios";
 import PropTypes from "prop-types";
 
 import Navbar from "../Navbar";
 import "./style.scss";
 
 function Quiz() {
+	// const [currentQuestion, setCurrentQuestion] = useState({});
 	const choices = [1, 2, 3, 4];
+
+	const fetchQuestions = (count) => {
+		axios({
+			method: "GET",
+			data: count,
+			url: "/api/question/randomQuestions",
+		})
+			.then((questions) => {
+				console.log(questions);
+			})
+			.catch((err) => console.log(err));
+	};
+
+	useEffect(() => {
+		fetchQuestions(5);
+	}, []);
+
 	return (
 		<div>
 			<Navbar />
