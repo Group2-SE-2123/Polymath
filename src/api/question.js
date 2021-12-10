@@ -1,12 +1,22 @@
 import express from "express";
+import { validationResult } from "express-validator";
 
 import { getAllQuestions, getQuestionById, createQuestion } from "../controller/question";
+import { validateQuestion } from "../validator/questionValidators";
 
 const router = express.Router();
 
-router.post("/createQuestion", (req, res) => {
+router.post("/createQuestion", validateQuestion, (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({
+			errors: errors.array(),
+		});
+	}
+
 	const question = req.body;
-	createQuestion(question)
+	return createQuestion(question)
 		.then(res.send({ success: true }))
 		.catch((err) => res.status(400).send(err));
 });

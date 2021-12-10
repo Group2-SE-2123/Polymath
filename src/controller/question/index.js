@@ -26,4 +26,18 @@ const createQuestion = (question) => {
 	});
 };
 
-export { getAllQuestions, getQuestionById, createQuestion };
+const deleteQuestion = (id) => {
+	prisma.choices.deleteMany({
+		where: {
+			questionId: id,
+		},
+	});
+
+	return prisma.question.delete({
+		where: {
+			id,
+		},
+	});
+};
+
+export { getAllQuestions, getQuestionById, createQuestion, deleteQuestion };
