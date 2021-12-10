@@ -1,48 +1,48 @@
-import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+// import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
 import PropTypes from "prop-types";
 
 import Logo from "../../images/Logo.svg";
-import { UserContext } from "../../context/UserContext";
-import { GlobalContext } from "../../context/GlobalContext";
+// import { UserContext } from "../../context/UserContext";
+// import { GlobalContext } from "../../context/GlobalContext";
 import WhiteDropdown from "../Dropdowns/WhiteDropdown";
 import "./style.scss";
 
 function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
-	const [userContext] = useContext(UserContext);
-	const [globalContext, setGlobalContext] = useContext(GlobalContext);
+	// const [userContext] = useContext(UserContext);
+	// const [globalContext, setGlobalContext] = useContext(GlobalContext);
 	const openMenu = () => setIsOpen(true);
 	const closeMenu = () => setIsOpen(false);
 
-	const getUser = () => {
-		axios({
-			method: "GET",
-			withCredentials: true,
-			url: "/auth/me",
-			headers: {
-				Authorization: `Bearer ${userContext}`,
-			},
-		}).then((res) => {
-			if (res.status === 200) {
-				setGlobalContext((prevState) => {
-					return { ...prevState, user: res.data };
-				});
-			} else {
-				setGlobalContext((prevState) => {
-					return { ...prevState, user: null };
-				});
-			}
-		});
-	};
+	// const getUser = () => {
+	// 	axios({
+	// 		method: "GET",
+	// 		withCredentials: true,
+	// 		url: "/auth/me",
+	// 		headers: {
+	// 			Authorization: `Bearer ${userContext}`,
+	// 		},
+	// 	}).then((res) => {
+	// 		if (res.status === 200) {
+	// 			setGlobalContext((prevState) => {
+	// 				return { ...prevState, user: res.data };
+	// 			});
+	// 		} else {
+	// 			setGlobalContext((prevState) => {
+	// 				return { ...prevState, user: null };
+	// 			});
+	// 		}
+	// 	});
+	// };
 
-	useEffect(() => {
-		if (!globalContext.user) {
-			getUser();
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (!globalContext.user) {
+	// 		getUser();
+	// 	}
+	// }, []);
 
 	return (
 		<div className="relative bg-white">
@@ -141,7 +141,8 @@ function Navbar() {
 						</a>
 					</nav>
 					<div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-						{!globalContext.user ? <NoAuth /> : <Auth user={globalContext.user} />}
+						{/* {!globalContext.user ? <NoAuth /> : <Auth user={globalContext.user} />} */}
+						<NoAuth />
 					</div>
 				</div>
 			</div>

@@ -1,6 +1,7 @@
 import { Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { useTimeoutFn } from "react-use";
+import { useQuery } from "react-query";
 import axios from "axios";
 import PropTypes from "prop-types";
 
@@ -8,24 +9,27 @@ import Navbar from "../Navbar";
 import "./style.scss";
 
 function Quiz() {
-	// const [currentQuestion, setCurrentQuestion] = useState({});
-	const choices = [1, 2, 3, 4];
-
-	const fetchQuestions = (count) => {
-		axios({
+	const fetchQuestions = async (count) => {
+		return axios({
 			method: "GET",
 			data: count,
 			url: "/api/question/randomQuestions",
 		})
 			.then((questions) => {
-				console.log(questions);
+				return questions;
 			})
 			.catch((err) => console.log(err));
 	};
 
-	useEffect(() => {
-		fetchQuestions(5);
-	}, []);
+	const { status, data, error } = useQuery("randomQuestions", fetchQuestions, { enabled: false });
+
+	if (status === "loading") {
+		return <span>Loading...</span>;
+	}
+
+	if (status === "error") {
+		return <span>Error: {error.message}</span>;
+	}
 
 	return (
 		<div>
@@ -33,9 +37,14 @@ function Quiz() {
 
 			<div className="question-section container mx-auto h-80 my-20"></div>
 			<section className="container mx-auto flex flex-wrap">
-				{choices.map((choice) => {
-					return <CardChoice props={choices.length} key={choice} />;
-				})}
+				{data.data.length > 0 &&
+					data.data[0].choice.map((value) => {
+						const obj = {
+							text: value.id.toString(),
+						};
+						console.log(data);
+						return <CardChoice props={obj} key={value.id} />;
+					})}
 			</section>
 		</div>
 	);
@@ -49,7 +58,6 @@ const CardChoice = ({ props }) => {
 
 	return (
 		<div className={cardDimensions}>
-			{/* <div className="py-16 px-10 border border-gray-200 card-color">{props}</div> */}
 			<div className="flex flex-col items-center">
 				<div className="w-64 h-40">
 					<Transition
@@ -69,7 +77,7 @@ const CardChoice = ({ props }) => {
 							}}
 							className="w-full h-full card-color rounded-md shadow-lg"
 						>
-							{props}
+							{props.text}
 						</div>
 					</Transition>
 				</div>
@@ -79,7 +87,8 @@ const CardChoice = ({ props }) => {
 };
 
 CardChoice.propTypes = {
-	props: PropTypes.number.isRequired,
+	props: PropTypes.object.isRequired,
+	text: PropTypes.string.isRequired,
 };
 
 export default Quiz;

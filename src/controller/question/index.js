@@ -50,6 +50,9 @@ const getRandomQuestions = async (count) => {
 		orderBy: {
 			id: "desc",
 		},
+		include: {
+			choice: true,
+		},
 	});
 };
 
