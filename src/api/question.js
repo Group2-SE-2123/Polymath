@@ -40,7 +40,7 @@ router.get("/getQuestion", (req, res) => {
 		.catch((err) => res.status(400).send(err));
 });
 
-router.get("/randomQuestions", (req, res) => {
+router.post("/randomQuestions", (req, res) => {
 	const { count } = req.body;
 	getRandomQuestions(count)
 		.then((questions) => res.send(questions))

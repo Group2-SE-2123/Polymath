@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useTimeoutFn } from "react-use";
@@ -11,25 +12,19 @@ import "./style.scss";
 function Quiz() {
 	const fetchQuestions = async (count) => {
 		return axios({
-			method: "GET",
+			method: "POST",
 			data: count,
 			url: "/api/question/randomQuestions",
-		})
-			.then((questions) => {
-				return questions;
-			})
-			.catch((err) => console.log(err));
+		}).then((questions) => {
+			return questions;
+		});
 	};
 
-	const { status, data, error } = useQuery("randomQuestions", fetchQuestions, { enabled: false });
-
-	if (status === "loading") {
-		return <span>Loading...</span>;
-	}
-
-	if (status === "error") {
-		return <span>Error: {error.message}</span>;
-	}
+	const { isLoading, isError, data, error, isFetching } = useQuery("todos", () =>
+		fetchQuestions({
+			count: 5,
+		})
+	);
 
 	return (
 		<div>
@@ -37,14 +32,16 @@ function Quiz() {
 
 			<div className="question-section container mx-auto h-80 my-20"></div>
 			<section className="container mx-auto flex flex-wrap">
-				{data.data.length > 0 &&
-					data.data[0].choice.map((value) => {
-						const obj = {
-							text: value.id.toString(),
-						};
-						console.log(data);
-						return <CardChoice props={obj} key={value.id} />;
-					})}
+				{isLoading ? (
+					<span>Loading...</span>
+				) : isError ? (
+					<span>Error: {error.message}</span>
+				) : (
+					<>
+						{data && console.log(data)}
+						<div>{isFetching ? "Fetching..." : null}</div>
+					</>
+				)}
 			</section>
 		</div>
 	);

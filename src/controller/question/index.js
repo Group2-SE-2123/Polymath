@@ -42,16 +42,10 @@ const deleteQuestion = (id) => {
 
 const getRandomQuestions = async (count) => {
 	const totalCount = await prisma.question.count();
-	const skip = Math.floor(Math.random() * totalCount);
-
+	const randomNumbers = [...new Array(count)].map(() => Math.round(Math.random() * totalCount));
 	return prisma.question.findMany({
-		take: count,
-		skip,
-		orderBy: {
-			id: "desc",
-		},
-		include: {
-			choice: true,
+		where: {
+			id: { in: randomNumbers },
 		},
 	});
 };
