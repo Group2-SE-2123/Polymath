@@ -8,7 +8,8 @@ import { ReactSVG } from "react-svg";
 import PropTypes from "prop-types";
 
 // Icons
-import { GoTriangleRight } from "react-icons/go";
+import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
+// import { set } from "ramda";
 import Clock from "../../images/Clock.svg";
 
 import Navbar from "../Navbar";
@@ -32,7 +33,17 @@ function Quiz() {
 		})
 	);
 
-	const index = 4;
+	const [index, setIndex] = useState(0);
+
+	const nextQuestion = () => {
+		if (index === data.length - 1) return;
+		setIndex(index + 1);
+	};
+
+	const previousQuestion = () => {
+		if (index === 0) return;
+		setIndex(index - 1);
+	};
 
 	return (
 		<div>
@@ -54,17 +65,24 @@ function Quiz() {
 								))}
 								<div>{isFetching ? "Fetching..." : null}</div>
 							</section>
-							<section className="container mx-auto flex flex-wrap my-10 px-48">
-								<button className="mr-auto px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80">
+							<section className="container mx-auto flex flex-wrap my-10 md:px-48 px-10">
+								<button
+									onClick={previousQuestion}
+									className="flex previous-button mr-auto px-9 py-2 font-medium tracking-wide text-black transition-colors duration-200 transform bg-gray-600 hover:bg-gray-500 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80"
+								>
+									<GoTriangleLeft className="my-auto" />
 									Previous
 								</button>
-								<div className="mx-auto relative">
-									<ReactSVG className="wrapper-class-name" src={Clock} />
+								<div className="flex mx-auto relative">
+									<ReactSVG className="mx-auto" src={Clock} />
 									<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 										1
 									</div>
 								</div>
-								<button className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80">
+								<button
+									onClick={nextQuestion}
+									className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
+								>
 									Next
 									<GoTriangleRight className="my-auto" />
 								</button>
@@ -86,7 +104,7 @@ const CardChoice = ({ props, length }) => {
 	return (
 		<div className={cardDimensions}>
 			<div className="flex flex-col items-center">
-				<div className="w-64 h-40">
+				<div className="md:w-64 w-full h-40">
 					<Transition
 						as={Fragment}
 						show={isShowing}
