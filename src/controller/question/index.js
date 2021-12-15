@@ -41,13 +41,9 @@ const deleteQuestion = (id) => {
 };
 
 const getRandomQuestions = async (count) => {
-	const totalCount = await prisma.question.count();
-	const randomNumbers = [...new Array(count)].map(() => Math.round(Math.random() * totalCount));
-	return prisma.question.findMany({
-		where: {
-			id: { in: randomNumbers },
-		},
-	});
+	const questions = await prisma.question.findMany();
+	const randomQuestions = questions.sort(() => 0.5 - Math.random()).slice(count);
+	return randomQuestions;
 };
 
 export { getAllQuestions, getQuestionById, createQuestion, deleteQuestion, getRandomQuestions };
