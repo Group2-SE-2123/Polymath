@@ -56,6 +56,11 @@ function Quiz() {
 		setIndex(index - 1);
 	};
 
+	const getCounterTime = () => {
+		const counterTime = getUpdatedCounter(timerQuery.data.counter, timerQuery.data.initialTime);
+		return counterTime > 0 ? counterTime : 0;
+	};
+
 	return (
 		<div>
 			<Navbar />
@@ -88,12 +93,7 @@ function Quiz() {
 									<GoTriangleLeft className="my-auto" />
 									Previous
 								</button>
-								<Timer
-									initialTime={getUpdatedCounter(
-										timerQuery.data.counter,
-										timerQuery.data.initialTime
-									)}
-								/>
+								<Timer initialTime={getCounterTime()} />
 								<button
 									onClick={nextQuestion}
 									className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
