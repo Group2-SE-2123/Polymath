@@ -2,24 +2,20 @@
 import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useTimeoutFn } from "react-use";
-import { useQuery, useMutation } from "react-query";
+import { useQuery } from "react-query";
 import axios from "axios";
-import { ReactSVG } from "react-svg";
 import PropTypes from "prop-types";
 
 // Icons
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
-import Clock from "../../images/Clock.svg";
 
 // Styles
 import Navbar from "../Navbar";
 import "./style.scss";
 
-// Hooks
-// import useProcessInterval from "../../hook/useProcessInterval";
-
 // Internal Imports
-import queryClient from "../../config/queryClient";
+import Timer from "./Timer";
+import { getUpdatedCounter } from "../../helper";
 
 function Quiz() {
 	// Fetch Fns
@@ -34,30 +30,24 @@ function Quiz() {
 	};
 
 	// React Queries
-	const { isLoading, isError, data, error, isFetching } = useQuery("quiz", () =>
+	const quizQuery = useQuery("quiz", () =>
 		fetchQuestions({
 			count: 5,
 		})
 	);
-
-	const mutation = useMutation(
-		() =>
-			fetchQuestions({
-				count: 5,
-			}),
-		{
-			onSuccess: (res) => {
-				queryClient.setQueryData("quiz", res);
-			},
-		}
-	);
+	const timerQuery = useQuery("timer", () => {
+		return {
+			counter: 1000,
+			initialTime: new Date(),
+		};
+	});
 
 	// Hooks
 	const [index, setIndex] = useState(0);
 
 	// Normal Fns
 	const nextQuestion = () => {
-		if (index === data.length - 1) return;
+		if (index === quizQuery.data.length - 1) return;
 		setIndex(index + 1);
 	};
 
@@ -66,34 +56,29 @@ function Quiz() {
 		setIndex(index - 1);
 	};
 
-	const refetch = async () => {
-		try {
-			const res = mutation.mutate();
-			console.log(res);
-		} catch (e) {
-			console.log(e);
-		}
-	};
-
 	return (
 		<div>
 			<Navbar />
-			{isLoading ? (
+			{quizQuery.isLoading || timerQuery.isLoading ? (
 				<span>Loading...</span>
-			) : isError ? (
-				<span>Error: {error.message}</span>
+			) : quizQuery.isError || timerQuery.isLoading ? (
+				<span>Error: {quizQuery.error.message}</span>
 			) : (
 				<>
-					{data && (
+					{quizQuery.data && timerQuery.data && (
 						<>
 							<div className="flex question-section container mx-auto h-60 my-10">
-								<h1 className="m-auto text-4xl question-text">{data[index].text}</h1>
+								<h1 className="m-auto text-4xl question-text">{quizQuery.data[index].text}</h1>
 							</div>
 							<section className="container mx-auto flex flex-wrap">
-								{data[index].choice.map((question) => (
-									<CardChoice props={question} length={data[2].choice.length} key={question.id} />
+								{quizQuery.data[index].choice.map((question) => (
+									<CardChoice
+										props={question}
+										length={quizQuery.data[index].choice.length}
+										key={question.id}
+									/>
 								))}
-								<div>{isFetching ? "Fetching..." : null}</div>
+								<div>{quizQuery.isFetching ? "Fetching..." : null}</div>
 							</section>
 							<section className="container mx-auto flex flex-wrap my-10 md:px-48 px-10">
 								<button
@@ -103,24 +88,18 @@ function Quiz() {
 									<GoTriangleLeft className="my-auto" />
 									Previous
 								</button>
-								<div className="flex mx-auto relative">
-									<ReactSVG className="mx-auto" src={Clock} />
-									<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-										1
-									</div>
-								</div>
+								<Timer
+									initialTime={getUpdatedCounter(
+										timerQuery.data.counter,
+										timerQuery.data.initialTime
+									)}
+								/>
 								<button
 									onClick={nextQuestion}
 									className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
 								>
 									Next
 									<GoTriangleRight className="my-auto" />
-								</button>
-								<button
-									onClick={refetch}
-									className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
-								>
-									Refetch
 								</button>
 							</section>
 						</>
