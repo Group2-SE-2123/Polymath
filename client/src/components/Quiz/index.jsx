@@ -2,39 +2,60 @@
 import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useTimeoutFn } from "react-use";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import axios from "axios";
 import { ReactSVG } from "react-svg";
 import PropTypes from "prop-types";
 
 // Icons
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
-// import { set } from "ramda";
 import Clock from "../../images/Clock.svg";
 
+// Styles
 import Navbar from "../Navbar";
 import "./style.scss";
 
+// Hooks
+// import useProcessInterval from "../../hook/useProcessInterval";
+
+// Internal Imports
+import queryClient from "../../config/queryClient";
+
 function Quiz() {
+	// Fetch Fns
 	const fetchQuestions = async (count) => {
 		return axios({
 			method: "POST",
 			data: count,
 			url: "/api/question/randomQuestions",
 		}).then((questions) => {
-			console.log(questions.data);
 			return questions.data;
 		});
 	};
 
-	const { isLoading, isError, data, error, isFetching } = useQuery("todos", () =>
+	// React Queries
+	const { isLoading, isError, data, error, isFetching } = useQuery("quiz", () =>
 		fetchQuestions({
 			count: 5,
 		})
 	);
 
+	const mutation = useMutation(
+		() =>
+			fetchQuestions({
+				count: 5,
+			}),
+		{
+			onSuccess: (res) => {
+				queryClient.setQueryData("quiz", res);
+			},
+		}
+	);
+
+	// Hooks
 	const [index, setIndex] = useState(0);
 
+	// Normal Fns
 	const nextQuestion = () => {
 		if (index === data.length - 1) return;
 		setIndex(index + 1);
@@ -43,6 +64,15 @@ function Quiz() {
 	const previousQuestion = () => {
 		if (index === 0) return;
 		setIndex(index - 1);
+	};
+
+	const refetch = async () => {
+		try {
+			const res = mutation.mutate();
+			console.log(res);
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	return (
@@ -86,6 +116,12 @@ function Quiz() {
 									Next
 									<GoTriangleRight className="my-auto" />
 								</button>
+								<button
+									onClick={refetch}
+									className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
+								>
+									Refetch
+								</button>
 							</section>
 						</>
 					)}
@@ -97,7 +133,7 @@ function Quiz() {
 
 const CardChoice = ({ props, length }) => {
 	const [isShowing, setIsShowing] = useState(true);
-	const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+	const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 100);
 
 	const cardDimensions = `lg:w-1/${length} md:w-1/2 w-full p-4`;
 
@@ -133,7 +169,7 @@ const CardChoice = ({ props, length }) => {
 
 CardChoice.propTypes = {
 	props: PropTypes.object.isRequired,
-	text: PropTypes.string.isRequired,
+	text: PropTypes.string,
 	length: PropTypes.number.isRequired,
 };
 
