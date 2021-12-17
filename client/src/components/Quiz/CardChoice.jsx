@@ -1,11 +1,15 @@
+/* eslint-disable no-param-reassign */
 import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useTimeoutFn } from "react-use";
+import { useMutation } from "react-query";
+import produce from "immer";
 import PropTypes from "prop-types";
 
 import { numberToLetter } from "../../helper";
+import queryClient from "../../config/queryClient";
 
-const CardChoice = ({ props, length, order }) => {
+const CardChoice = ({ props, length, order, pageIndex }) => {
 	// Hooks
 	const [isShowing, setIsShowing] = useState(true);
 	const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 100);
@@ -17,8 +21,23 @@ const CardChoice = ({ props, length, order }) => {
 		return `${letter}.`;
 	};
 
+	const updateSelection = useMutation((details) => details, {
+		onSuccess: (data) => {
+			queryClient.setQueriesData("selection", (oldData) => {
+				const updatedSelection = produce(oldData, (draft) => {
+					draft[data.pageIndex] = data.order;
+				});
+				return updatedSelection;
+			});
+		},
+	});
+
+	const chooseCard = (details) => {
+		updateSelection.mutate(details);
+	};
+
 	return (
-		<div className={cardDimensions}>
+		<div onClick={() => chooseCard({ order, pageIndex })} className={cardDimensions}>
 			<div className="flex flex-col items-center">
 				<div className="md:w-64 w-full h-40">
 					<Transition
@@ -53,6 +72,7 @@ CardChoice.propTypes = {
 	text: PropTypes.string,
 	length: PropTypes.number.isRequired,
 	order: PropTypes.number.isRequired,
+	pageIndex: PropTypes.number.isRequired,
 };
 
 export default CardChoice;

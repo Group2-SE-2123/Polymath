@@ -13,7 +13,7 @@ import "./style.scss";
 // Internal Imports
 import Timer from "./Timer";
 import CardChoice from "./CardChoice";
-import { getUpdatedCounter } from "../../helper";
+import { getUpdatedCounter, transformQueryObject } from "../../helper";
 
 function Quiz() {
 	// Fetch Fns
@@ -30,7 +30,7 @@ function Quiz() {
 	// React Queries
 	const timerQuery = useQuery("timer", () => {
 		return {
-			counter: 1000,
+			counter: 10000,
 			initialTime: new Date(),
 		};
 	});
@@ -49,7 +49,11 @@ function Quiz() {
 		}
 	);
 
-	console.log(selectionQuery.data);
+	const [hasLoaded, hasError, hasData] = transformQueryObject([
+		timerQuery,
+		quizQuery,
+		selectionQuery,
+	]);
 
 	// Hooks
 	const [index, setIndex] = useState(0);
@@ -73,13 +77,13 @@ function Quiz() {
 	return (
 		<div>
 			<Navbar />
-			{quizQuery.isLoading || timerQuery.isLoading ? (
+			{hasLoaded ? (
 				<span>Loading...</span>
-			) : quizQuery.isError || timerQuery.isLoading ? (
+			) : hasError ? (
 				<span>Error: {quizQuery.error.message}</span>
 			) : (
 				<>
-					{quizQuery.data && timerQuery.data && (
+					{hasData && (
 						<>
 							<div className="flex question-section container mx-auto h-60 my-10">
 								<h1 className="m-auto text-4xl question-text">{quizQuery.data[index].text}</h1>
@@ -91,6 +95,7 @@ function Quiz() {
 										length={quizQuery.data[index].choice.length}
 										key={question.id}
 										order={order}
+										pageIndex={index}
 									/>
 								))}
 								<div>{quizQuery.isFetching ? "Fetching..." : null}</div>

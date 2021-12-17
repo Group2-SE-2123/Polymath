@@ -22,4 +22,23 @@ const numberToLetter = (number) => {
 	return String.fromCharCode(65 + number);
 };
 
-export { getSecondsSince, getRandomNumber, getUpdatedCounter, numberToLetter };
+// function that takes in a list of booleans and returns if all are true and false if otherwise
+const allTrue = (list) => {
+	return list.every((item) => item === true);
+};
+
+const transformQueryObject = (list) => {
+	const isLoading = list.every((item) => item.isLoading === true);
+	const isError = list.every((item) => item.isError === true);
+	const hasData = list.every((item) => item.data);
+	return [isLoading, isError, hasData];
+};
+
+export {
+	getSecondsSince,
+	getRandomNumber,
+	getUpdatedCounter,
+	numberToLetter,
+	allTrue,
+	transformQueryObject,
+};
