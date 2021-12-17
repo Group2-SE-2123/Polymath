@@ -42,8 +42,17 @@ const deleteQuestion = (id) => {
 
 const getRandomQuestions = async (count) => {
 	const questions = await prisma.question.findMany({
-		include: {
-			choice: true,
+		select: {
+			id: true,
+			text: true,
+			category: true,
+			difficulty: true,
+			choice: {
+				select: {
+					id: true,
+					text: true,
+				},
+			},
 		},
 	});
 	const randomQuestions = questions.sort(() => 0.5 - Math.random()).slice(count);
