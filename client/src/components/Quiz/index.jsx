@@ -1,10 +1,7 @@
 /* eslint-disable no-nested-ternary */
-import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import { useTimeoutFn } from "react-use";
 import { useQuery } from "react-query";
 import axios from "axios";
-import PropTypes from "prop-types";
 
 // Icons
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
@@ -15,6 +12,7 @@ import "./style.scss";
 
 // Internal Imports
 import Timer from "./Timer";
+import CardChoice from "./CardChoice";
 import { getUpdatedCounter } from "../../helper";
 
 function Quiz() {
@@ -30,17 +28,17 @@ function Quiz() {
 	};
 
 	// React Queries
-	const quizQuery = useQuery("quiz", () =>
-		fetchQuestions({
-			count: 5,
-		})
-	);
 	const timerQuery = useQuery("timer", () => {
 		return {
 			counter: 1000,
 			initialTime: new Date(),
 		};
 	});
+	const quizQuery = useQuery("quiz", () =>
+		fetchQuestions({
+			count: 5,
+		})
+	);
 
 	// Hooks
 	const [index, setIndex] = useState(0);
@@ -76,11 +74,12 @@ function Quiz() {
 								<h1 className="m-auto text-4xl question-text">{quizQuery.data[index].text}</h1>
 							</div>
 							<section className="container mx-auto flex flex-wrap">
-								{quizQuery.data[index].choice.map((question) => (
+								{quizQuery.data[index].choice.map((question, order) => (
 									<CardChoice
 										props={question}
 										length={quizQuery.data[index].choice.length}
 										key={question.id}
+										order={order}
 									/>
 								))}
 								<div>{quizQuery.isFetching ? "Fetching..." : null}</div>
@@ -109,47 +108,5 @@ function Quiz() {
 		</div>
 	);
 }
-
-const CardChoice = ({ props, length }) => {
-	const [isShowing, setIsShowing] = useState(true);
-	const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 100);
-
-	const cardDimensions = `lg:w-1/${length} md:w-1/2 w-full p-4`;
-
-	return (
-		<div className={cardDimensions}>
-			<div className="flex flex-col items-center">
-				<div className="md:w-64 w-full h-40">
-					<Transition
-						as={Fragment}
-						show={isShowing}
-						enter="transform transition duration-[400ms]"
-						enterFrom="opacity-0 rotate-[-120deg] scale-50"
-						enterTo="opacity-100 rotate-0 scale-100"
-						leave="transform duration-200 transition ease-in-out"
-						leaveFrom="opacity-100 rotate-0 scale-100 "
-						leaveTo="opacity-0 scale-95 "
-					>
-						<div
-							onClick={() => {
-								setIsShowing(false);
-								resetIsShowing();
-							}}
-							className="flex w-full h-full card-color shadow-lg px-4 py-auto"
-						>
-							<h2 className="m-auto choice-text text-2xl font-extrabold">{props.text}</h2>
-						</div>
-					</Transition>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-CardChoice.propTypes = {
-	props: PropTypes.object.isRequired,
-	text: PropTypes.string,
-	length: PropTypes.number.isRequired,
-};
 
 export default Quiz;

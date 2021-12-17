@@ -16,4 +16,8 @@ const getUpdatedCounter = (counter, date) => {
 	return newCounter;
 };
 
-export { getSecondsSince, getRandomNumber, getUpdatedCounter };
+const numberToLetter = (number) => {
+	return String.fromCharCode(65 + number);
+};
+
+export { getSecondsSince, getRandomNumber, getUpdatedCounter, numberToLetter };

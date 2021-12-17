@@ -4,6 +4,7 @@ import { useTimer } from "use-timer";
 import PropType from "prop-types";
 
 import Clock from "../../images/Clock.svg";
+import queryClient from "../../config/queryClient";
 
 const Timer = ({ initialTime }) => {
 	const { time, start } = useTimer({
@@ -11,6 +12,16 @@ const Timer = ({ initialTime }) => {
 		timerType: "DECREMENTAL",
 		endTime: 0,
 	});
+
+	useEffect(() => {
+		if (time === 0) {
+			console.log("Time's Up!");
+			queryClient.invalidateQueries("quiz");
+			queryClient.removeQueries("quiz");
+			queryClient.invalidateQueries("timer");
+			queryClient.removeQueries("timer");
+		}
+	}, [time]);
 
 	useEffect(() => {
 		start();
