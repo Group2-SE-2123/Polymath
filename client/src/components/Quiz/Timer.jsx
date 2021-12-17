@@ -15,7 +15,6 @@ const Timer = ({ initialTime }) => {
 
 	useEffect(() => {
 		if (time === 0) {
-			console.log("Time's Up!");
 			queryClient.invalidateQueries("quiz");
 			queryClient.removeQueries("quiz");
 			queryClient.invalidateQueries("timer");

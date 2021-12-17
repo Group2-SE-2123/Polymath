@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { numberToLetter } from "../../helper";
 
 const CardChoice = ({ props, length, order }) => {
+	// Hooks
 	const [isShowing, setIsShowing] = useState(true);
 	const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 100);
 

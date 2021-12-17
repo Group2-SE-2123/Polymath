@@ -10,12 +10,14 @@ const getRandomNumber = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+// function that takes in a number and returns a string of that number in words
 const getUpdatedCounter = (counter, date) => {
 	const passedSeconds = getSecondsSince(date);
 	const newCounter = counter - passedSeconds;
 	return newCounter;
 };
 
+// function that takes in a number and returns a string of that number in words
 const numberToLetter = (number) => {
 	return String.fromCharCode(65 + number);
 };

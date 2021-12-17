@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 
@@ -39,6 +39,17 @@ function Quiz() {
 			count: 5,
 		})
 	);
+	const selectionQuery = useQuery(
+		"selection",
+		() => {
+			return new Array(quizQuery.data.length).fill(null);
+		},
+		{
+			enabled: !!quizQuery.data,
+		}
+	);
+
+	console.log(selectionQuery.data);
 
 	// Hooks
 	const [index, setIndex] = useState(0);
