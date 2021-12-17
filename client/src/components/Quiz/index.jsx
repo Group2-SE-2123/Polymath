@@ -74,6 +74,10 @@ function Quiz() {
 		return counterTime > 0 ? counterTime : 0;
 	};
 
+	const isSelected = (pageIndex, orderIndex) => {
+		return selectionQuery.data[pageIndex] === orderIndex;
+	};
+
 	return (
 		<div>
 			<Navbar />
@@ -96,6 +100,7 @@ function Quiz() {
 										key={question.id}
 										order={order}
 										pageIndex={index}
+										isSelected={isSelected(index, order)}
 									/>
 								))}
 								<div>{quizQuery.isFetching ? "Fetching..." : null}</div>

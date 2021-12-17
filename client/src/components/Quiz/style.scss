@@ -1,11 +1,30 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@500&display=swap");
 
+$gray: #d1d1d1;
+$yellow: #fcc822;
+$black: #000;
+$white: #fff;
+
+@mixin card-type($selected: true) {
+	@if $selected {
+		background-color: $yellow;
+		color: $white;
+	} @else {
+		background-color: $gray;
+		color: $black;
+	}
+}
+
 .question-section {
 	background-color: #fcc822;
 }
 
-.card-color {
-	background-color: #d1d1d1;
+.card-color-selected {
+	@include card-type($selected: true);
+}
+
+.card-color-unselected {
+	@include card-type($selected: false);
 }
 
 .question-text {

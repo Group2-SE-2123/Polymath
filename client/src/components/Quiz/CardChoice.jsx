@@ -9,10 +9,10 @@ import PropTypes from "prop-types";
 import { numberToLetter } from "../../helper";
 import queryClient from "../../config/queryClient";
 
-const CardChoice = ({ props, length, order, pageIndex }) => {
+const CardChoice = ({ props, length, order, pageIndex, isSelected }) => {
 	// Hooks
 	const [isShowing, setIsShowing] = useState(true);
-	const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 100);
+	const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 0);
 
 	const cardDimensions = `lg:w-1/${length} md:w-1/2 w-full p-4`;
 
@@ -36,6 +36,11 @@ const CardChoice = ({ props, length, order, pageIndex }) => {
 		updateSelection.mutate(details);
 	};
 
+	const getCardClass = (hasSelected) => {
+		const cardColor = hasSelected ? "card-color-selected" : "card-color-unselected";
+		return `flex w-full h-full ${cardColor} shadow-lg px-4 py-2 py-auto`;
+	};
+
 	return (
 		<div onClick={() => chooseCard({ order, pageIndex })} className={cardDimensions}>
 			<div className="flex flex-col items-center">
@@ -55,7 +60,7 @@ const CardChoice = ({ props, length, order, pageIndex }) => {
 								setIsShowing(false);
 								resetIsShowing();
 							}}
-							className="flex w-full h-full card-color shadow-lg px-4 py-2 py-auto"
+							className={getCardClass(isSelected)}
 						>
 							<h2 className="m-auto choice-text text-2xl font-extrabold">{props.text}</h2>
 							<h3 className="absolute l-0 t-5 text-xl font-bold">{addLetter(order)}</h3>
@@ -73,6 +78,7 @@ CardChoice.propTypes = {
 	length: PropTypes.number.isRequired,
 	order: PropTypes.number.isRequired,
 	pageIndex: PropTypes.number.isRequired,
+	isSelected: PropTypes.bool.isRequired,
 };
 
 export default CardChoice;
