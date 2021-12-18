@@ -18,19 +18,24 @@ function Navbar() {
 
 	const userQuery = useQuery("user_details", async () => {
 		const sessionQuery = queryClient.getQueryData("session");
+		if (!sessionQuery) return null;
 		return axios({
 			method: "GET",
 			withCredentials: true,
 			url: "/auth/me",
 			headers: {
-				Authorization: `Bearer ${sessionQuery.data.token}`,
+				Authorization: `Bearer ${sessionQuery.token}`,
 			},
-		}).then((res) => {
-			if (res.status === 200) {
-				return res.data;
-			}
-			return null;
-		});
+		})
+			.then((res) => {
+				if (res.status === 200) {
+					return res.data;
+				}
+				return null;
+			})
+			.catch(() => {
+				return null;
+			});
 	});
 
 	return (
