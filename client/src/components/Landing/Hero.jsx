@@ -49,7 +49,7 @@ function Hero() {
                                 sm:text-left sm:ml-0
                             "
 							>
-								We help you prepare for exams and quizes
+								We help you prepare for exams and quizzes
 							</p>
 							<div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
 								<div className="shadow-2xl">

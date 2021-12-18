@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useQuery, useMutation } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import queryClient from "../../config/queryClient";
@@ -8,15 +8,15 @@ import queryClient from "../../config/queryClient";
 const Welcome = () => {
 	// Hooks
 	const navigate = useNavigate();
-	const sessionQuery = useQuery("session");
 	const logoutMutation = useMutation(
 		async () => {
+			const sessionQuery = queryClient.getQueryData("session");
 			return axios({
 				method: "GET",
 				withCredentials: true,
 				url: "/auth/logout",
 				headers: {
-					Authorization: `Bearer ${sessionQuery.data.token}`,
+					Authorization: `Bearer ${sessionQuery.token}`,
 				},
 			});
 		},

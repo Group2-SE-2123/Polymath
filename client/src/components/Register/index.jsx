@@ -1,12 +1,34 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
 import axios from "axios";
 
+import queryClient from "../../config/queryClient";
+
 function Register() {
+	// Hooks
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const navigate = useNavigate();
+
+	const registerMutation = useMutation(
+		async (data) => {
+			return axios({
+				method: "POST",
+				url: "/auth/register",
+				data,
+			});
+		},
+		{
+			onSuccess: (data) => {
+				queryClient.setQueryData("session", data);
+				navigate("/dashboard", { replace: true });
+			},
+		}
+	);
 
 	//  handle submit
 	const handleSubmit = (e) => {
@@ -18,12 +40,7 @@ function Register() {
 			password,
 			confirmPassword,
 		};
-		axios({
-			method: "POST",
-			data: user,
-			withCredentials: true,
-			url: "/auth/register",
-		});
+		registerMutation.mutate(user);
 	};
 
 	return (

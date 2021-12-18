@@ -9,34 +9,29 @@ import Logo from "../../images/Logo.svg";
 import WhiteDropdown from "../Dropdowns/WhiteDropdown";
 import "./style.scss";
 
+import queryClient from "../../config/queryClient";
+
 function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
 	const openMenu = () => setIsOpen(true);
 	const closeMenu = () => setIsOpen(false);
 
-	const sessionQuery = useQuery("session");
-
-	const userQuery = useQuery(
-		"user_details",
-		async () => {
-			return axios({
-				method: "GET",
-				withCredentials: true,
-				url: "/auth/me",
-				headers: {
-					Authorization: `Bearer ${sessionQuery.data.token}`,
-				},
-			}).then((res) => {
-				if (res.status === 200) {
-					return res.data;
-				}
-				return null;
-			});
-		},
-		{
-			enabled: !!sessionQuery.data,
-		}
-	);
+	const userQuery = useQuery("user_details", async () => {
+		const sessionQuery = queryClient.getQueryData("session");
+		return axios({
+			method: "GET",
+			withCredentials: true,
+			url: "/auth/me",
+			headers: {
+				Authorization: `Bearer ${sessionQuery.data.token}`,
+			},
+		}).then((res) => {
+			if (res.status === 200) {
+				return res.data;
+			}
+			return null;
+		});
+	});
 
 	return (
 		<div className="relative bg-white">
