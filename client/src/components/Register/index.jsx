@@ -19,7 +19,13 @@ function Register() {
 			return axios({
 				method: "POST",
 				url: "/auth/register",
+				withCredentials: true,
 				data,
+			}).then((res) => {
+				if (res.status !== 200) {
+					return null;
+				}
+				return res.data;
 			});
 		},
 		{
