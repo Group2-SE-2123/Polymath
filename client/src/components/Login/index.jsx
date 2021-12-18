@@ -1,21 +1,57 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import Logo from "../../images/Logo.svg";
 import Icon from "../../images/Icon.svg";
-import { UserContext } from "../../context/UserContext";
+import queryClient from "../../config/queryClient";
 import "./style.scss";
 
 function Login() {
+	// Hooks
 	const [error, setError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [, setUserContext] = useContext(UserContext);
 
 	const navigate = useNavigate();
+
+	// React Queries
+	const loginMutation = useMutation(
+		async (data) => {
+			return axios({
+				method: "POST",
+				data,
+				withCredentials: true,
+				url: "/auth/login",
+			}).then((res) => {
+				if (res.status !== 200) {
+					if (res.status === 400) {
+						setError("Please fill all the fields correctly!");
+					} else if (res.status === 401) {
+						setError("Invalid email and password combination.");
+					} else {
+						setError("Something went wrong");
+					}
+					return null;
+				}
+				return res.data;
+			});
+		},
+		{
+			onSuccess: (data) => {
+				queryClient.setQueryData("session", data);
+				navigate("/dashboard", { replace: true });
+				setIsSubmitting(false);
+			},
+			onError: () => {
+				setError("Something went wrong");
+				setIsSubmitting(false);
+			},
+		}
+	);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -27,31 +63,7 @@ function Login() {
 			password,
 		};
 
-		axios({
-			method: "POST",
-			data,
-			withCredentials: true,
-			url: "/auth/login",
-		})
-			.then(async (res) => {
-				setIsSubmitting(false);
-				if (res.status !== 200) {
-					if (res.status === 400) {
-						setError("Please fill all the fields correctly!");
-					} else if (res.status === 401) {
-						setError("Invalid email and password combination.");
-					} else {
-						setError("Something went wrong");
-					}
-				} else {
-					setUserContext(() => res.data.token);
-					navigate("/dashboard", { replace: true });
-				}
-			})
-			.catch(() => {
-				setIsSubmitting(false);
-				setError("Something went wrong with error");
-			});
+		loginMutation.mutate(data);
 	};
 
 	return (

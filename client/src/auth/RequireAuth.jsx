@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useLocation, Navigate } from "react-router-dom";
+import { useQuery } from "react-query";
 import PropTypes from "prop-types";
-
-import { UserContext } from "../context/UserContext";
 
 const RequireAuth = ({ children }) => {
 	const location = useLocation();
-	const [userContext] = useContext(UserContext);
+	const sessionQuery = useQuery("session");
 
-	if (!userContext) {
+	if (sessionQuery.data) {
 		return <Navigate to="/login" state={{ from: location }} />;
 	}
 
