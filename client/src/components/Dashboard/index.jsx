@@ -3,6 +3,7 @@ import axios from "axios";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
+import Navbar from "../Navbar";
 import queryClient from "../../config/queryClient";
 
 const Welcome = () => {
@@ -33,10 +34,13 @@ const Welcome = () => {
 		logoutMutation.mutate();
 	};
 	return (
-		<div>
-			Welcome!
-			<button onClick={logoutHandler}>Logout</button>
-		</div>
+		<>
+			<Navbar />
+			<div>
+				Welcome!
+				<button onClick={logoutHandler}>Logout</button>
+			</div>
+		</>
 	);
 };
 
