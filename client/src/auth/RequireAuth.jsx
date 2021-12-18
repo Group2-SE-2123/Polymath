@@ -7,7 +7,13 @@ const RequireAuth = ({ children }) => {
 	const location = useLocation();
 	const sessionQuery = useQuery("session");
 
-	if (sessionQuery.data) {
+	if (sessionQuery.isLoading) {
+		return "Is Loading";
+	}
+	if (sessionQuery.isError) {
+		return "Error";
+	}
+	if (!sessionQuery.data) {
 		return <Navigate to="/login" state={{ from: location }} />;
 	}
 

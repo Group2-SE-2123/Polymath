@@ -1,24 +1,36 @@
-import React, { useContext } from "react";
+import React from "react";
 import axios from "axios";
+import { useQuery, useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
-import { UserContext } from "../../context/UserContext";
+import queryClient from "../../config/queryClient";
 
 const Welcome = () => {
-	const [userContext, setUserContext] = useContext(UserContext);
+	// Hooks
 	const navigate = useNavigate();
-	const logoutHandler = () => {
-		axios({
-			method: "GET",
-			withCredentials: true,
-			url: "/auth/logout",
-			headers: {
-				Authorization: `Bearer ${userContext}`,
+	const sessionQuery = useQuery("session");
+	const logoutMutation = useMutation(
+		async () => {
+			return axios({
+				method: "GET",
+				withCredentials: true,
+				url: "/auth/logout",
+				headers: {
+					Authorization: `Bearer ${sessionQuery.data.token}`,
+				},
+			});
+		},
+		{
+			onSuccess: () => {
+				queryClient.removeQueries("session");
+				queryClient.removeQueries("user_details");
+				navigate("/", { replace: true });
 			},
-		}).then(async () => {
-			setUserContext(() => null);
-			navigate("/", { replace: true });
-		});
+		}
+	);
+
+	const logoutHandler = () => {
+		logoutMutation.mutate();
 	};
 	return (
 		<div>
