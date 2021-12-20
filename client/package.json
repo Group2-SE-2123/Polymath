@@ -11,6 +11,7 @@
 	"dependencies": {
 		"@headlessui/react": "^1.4.2",
 		"@heroicons/react": "^1.0.5",
+		"@notus-pro/react": "^1.0.1",
 		"@popperjs/core": "^2.11.0",
 		"@vitejs/plugin-react": "^1.1.0",
 		"axios": "^0.24.0",
