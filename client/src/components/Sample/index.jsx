@@ -3,6 +3,15 @@ import React from "react";
 // Icons
 import { AiFillFlag, AiFillClockCircle, AiFillCheckCircle } from "react-icons/ai";
 
+// Images
+import Badge1 from "../../images/svg/Badge1.svg";
+import Badge2 from "../../images/svg/Badge2.svg";
+import Badge3 from "../../images/svg/Badge3.svg";
+import ArithmeticImg from "../../images/img/arithmetic.jpg";
+import AlgebraImg from "../../images/img/algebra.jpg";
+import GeometryImg from "../../images/img/geometry.jpg";
+import CalculusImg from "../../images/img/calculus.jpg";
+
 import Navbar from "../Navbar";
 import ProfileImg from "../../images/img/profile.png";
 
@@ -13,8 +22,8 @@ function index() {
 		<div>
 			<Navbar />
 
-			<main className="dashboard-font flex w-full h-screen dashboard-background">
-				<aside className="w-80 h-screen bg-gray w-fulll hidden sm:block">
+			<main className="dashboard-font flex w-full h-full dashboard-background">
+				<aside className="w-80 bg-gray h-full hidden sm:block">
 					<div className="flex flex-col justify-between h-screen p-4 dashboard-background">
 						<div className="text-sm">
 							<div className="bg-gray-900 text-white p-5 rounded cursor-pointer">
@@ -79,6 +88,68 @@ function index() {
 									<div className="flex flex-col mx-2">
 										<div className="dashboard-text font-bold">200</div>
 										<div className="dashboard-text font-light">Correct Answers</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="flex flex-col md:flex-row">
+						<div className="flex flex-col w-full py-3 md:w-1/2 lg:mx-5 md:mx-3">
+							<div className="flex flex-row mx-5">
+								<h3 className="w-1/2 dashboard-text font-bold">Achievements</h3>
+								<div className="w-1/2 bg-gray-200 h-2 rounded-lg my-3">
+									<div className="bg-gray-400 h-2 rounded-lg w-1/2" style={{ width: "50%" }}></div>
+								</div>
+							</div>
+							<div className="grid grid-cols-1 divide-y w-full p-4 bg-white shadow-2xl rounded-2xl">
+								<div className="grid grid-cols-3 gap-3 pt-5 mb-8">
+									<div className="flex flex-col items-center">
+										<img className="w-20" src={Badge1} alt="badge1" />
+										<h3>Comeback</h3>
+									</div>
+									<div className="flex flex-col items-center"></div>
+									<div className="flex flex-col items-center">
+										<img className="w-20" src={Badge2} alt="badge2" />
+										<h3>Lucky</h3>
+									</div>
+									<div className="flex flex-col items-center"></div>
+									<div className="flex flex-col items-center">
+										<img className="w-20" src={Badge3} alt="badge3" />
+										<h3>Winner</h3>
+									</div>
+									<div className="flex flex-col items-center"></div>
+								</div>
+								<div className="flex">
+									<h3 className="mx-auto mt-7 mb-4 dashboard-text font-normal cursor-pointer">
+										View All
+									</h3>
+								</div>
+							</div>
+						</div>
+						<div className="flex flex-col w-full py-3 md:w-1/2 lg:mx-5 md:mx-3">
+							<div className="flex flex-row mx-5">
+								<h3 className="w-1/2 dashboard-text font-bold">Categories</h3>
+								<div className="ml-auto cursor-pointer">
+									<h3 className="dashboard-text font-normal">View All</h3>
+								</div>
+							</div>
+							<div className="w-full p-4 bg-white shadow-2xl rounded-2xl">
+								<div className="grid grid-cols-2 gap-2 justify-center pt-5">
+									<div className="relative mx-auto">
+										<img className="h-40 w-40 mx-none rounded-3xl" src={ArithmeticImg} alt="" />
+										<h3 className="absolute text-white bottom-2 left-2 font-bold">Arithmetic</h3>
+									</div>
+									<div className="relative mx-auto">
+										<img className="h-40 w-40 mx-none rounded-3xl" src={AlgebraImg} alt="" />
+										<h3 className="absolute text-white bottom-2 left-2 font-bold">Algebra</h3>
+									</div>
+									<div className="relative mx-auto">
+										<img className="h-40 w-40 mx-none rounded-3xl" src={GeometryImg} alt="" />
+										<h3 className="absolute text-white bottom-2 left-2 font-bold">Geometry</h3>
+									</div>
+									<div className="relative mx-auto">
+										<img className="h-40 w-40 mx-none rounded-3xl" src={CalculusImg} alt="" />
+										<h3 className="absolute text-white bottom-2 left-2 font-bold">Calculus</h3>
 									</div>
 								</div>
 							</div>
