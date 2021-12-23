@@ -2,6 +2,10 @@ import React from "react";
 
 // Icons
 import { AiFillFlag, AiFillClockCircle, AiFillCheckCircle } from "react-icons/ai";
+import { MdSpaceDashboard } from "react-icons/md";
+import { BiSupport } from "react-icons/bi";
+import { IoMdNotifications } from "react-icons/io";
+import { RiLogoutBoxFill } from "react-icons/ri";
 
 // Images
 import Badge1 from "../../images/svg/Badge1.svg";
@@ -23,31 +27,23 @@ function index() {
 			<Navbar />
 
 			<main className="dashboard-font flex w-full h-full dashboard-background">
-				<aside className="w-80 bg-gray h-full hidden sm:block">
-					<div className="flex flex-col justify-between h-screen p-4 dashboard-background">
-						<div className="text-sm">
-							<div className="bg-gray-900 text-white p-5 rounded cursor-pointer">
-								Teams in space
-							</div>
-						</div>
+				<aside className="w-80 bg-gray hidden sm:flex sm:flex-col my-5 ml-5">
+					<div className="text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto selected-nav">
+						<MdSpaceDashboard size={30} className="mr-7 my-5" style={{ color: "#fff" }} />
+						<h3 className="my-auto text-white font-medium">Dashboard</h3>
+					</div>
+					<div className="text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto">
+						<BiSupport size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
+						<h3 className="my-auto dashboard-text font-medium">Support</h3>
+					</div>
+					<div className="text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto">
+						<IoMdNotifications size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
+						<h3 className="my-auto dashboard-text font-medium">Notifications</h3>
+					</div>
 
-						<div className="flex p-3 text-white bg-red-500 rounded cursor-pointer text-center text-sm">
-							<button className="rounded inline-flex items-center">
-								<svg
-									className="w-4 h-4 mr-2"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									fill="currentColor"
-								>
-									<path
-										fillRule="evenodd"
-										d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-										clipRule="evenodd"
-									/>
-								</svg>
-								<span className="font-semibold">Logout</span>
-							</button>
-						</div>
+					<div className="mt-auto text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto">
+						<RiLogoutBoxFill size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
+						<h3 className="my-auto dashboard-text font-semibold">Log Out</h3>
 					</div>
 				</aside>
 
@@ -93,8 +89,8 @@ function index() {
 							</div>
 						</div>
 					</div>
-					<div className="flex flex-col md:flex-row">
-						<div className="flex flex-col w-full py-3 md:w-1/2 lg:mx-5 md:mx-3">
+					<div className="flex flex-col lg:flex-row">
+						<div className="flex flex-col w-full py-3 lg:w-1/2 lg:mx-5 my-5 lg:my-0">
 							<div className="flex flex-row mx-5">
 								<h3 className="w-1/2 dashboard-text font-bold">Achievements</h3>
 								<div className="w-1/2 bg-gray-200 h-2 rounded-lg my-3">
@@ -126,7 +122,7 @@ function index() {
 								</div>
 							</div>
 						</div>
-						<div className="flex flex-col w-full py-3 md:w-1/2 lg:mx-5 md:mx-3">
+						<div className="flex flex-col w-full py-3 lg:w-1/2 lg:mx-5 my-5 lg:my-0">
 							<div className="flex flex-row mx-5">
 								<h3 className="w-1/2 dashboard-text font-bold">Categories</h3>
 								<div className="ml-auto cursor-pointer">
