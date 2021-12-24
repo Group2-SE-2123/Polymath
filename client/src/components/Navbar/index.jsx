@@ -51,10 +51,10 @@ function Navbar() {
 			"
 				>
 					<div className="flex justify-start lg:w-0 lg:flex-1">
-						<a href="#">
+						<Link to="/">
 							<span className="sr-only">Workflow</span>
 							<img className="h-8 w-auto sm:h-10" src={Logo} alt="" />
-						</a>
+						</Link>
 					</div>
 					<div className="-mr-2 -my-2 md:hidden">
 						<button
