@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
+import produce from "immer";
+import PropTypes from "prop-types";
 
 // Icons
 import { AiFillFlag, AiFillClockCircle, AiFillCheckCircle } from "react-icons/ai";
@@ -29,6 +31,19 @@ import "./style.scss";
 const Welcome = () => {
 	// Hooks
 	const navigate = useNavigate();
+	const [sidebarState, setSidebarState] = React.useState([true, false, false]);
+
+	// Functions
+	const toggleSidebar = (index) => {
+		setSidebarState(
+			produce(sidebarState, (draft) => {
+				draft.fill(false);
+				draft[index] = true;
+			})
+		);
+	};
+
+	// React Queries
 	const logoutMutation = useMutation(
 		async () => {
 			const sessionQuery = queryClient.getQueryData("session");
@@ -60,18 +75,24 @@ const Welcome = () => {
 
 				<main className="dashboard-font flex w-full h-full dashboard-background">
 					<aside className="w-80 bg-gray hidden sm:flex sm:flex-col my-5 ml-5">
-						<div className="text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto selected-nav">
-							<MdSpaceDashboard size={30} className="mr-7 my-5" style={{ color: "#fff" }} />
-							<h3 className="my-auto text-white font-medium">Dashboard</h3>
-						</div>
-						<div className="text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto">
-							<BiSupport size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
-							<h3 className="my-auto dashboard-text font-medium">Support</h3>
-						</div>
-						<div className="text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto">
-							<IoMdNotifications size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
-							<h3 className="my-auto dashboard-text font-medium">Notifications</h3>
-						</div>
+						<SidebarButton
+							text={"Dashboard"}
+							Icon={MdSpaceDashboard}
+							isSelected={sidebarState[0]}
+							toggleFunc={() => toggleSidebar(0)}
+						/>
+						<SidebarButton
+							text={"Support"}
+							Icon={BiSupport}
+							isSelected={sidebarState[1]}
+							toggleFunc={() => toggleSidebar(1)}
+						/>
+						<SidebarButton
+							text={"Notifications"}
+							Icon={IoMdNotifications}
+							isSelected={sidebarState[2]}
+							toggleFunc={() => toggleSidebar(2)}
+						/>
 
 						<div
 							onClick={logoutHandler}
@@ -177,7 +198,7 @@ const Welcome = () => {
 							</div>
 							<div className="flex flex-col w-full py-3 lg:w-1/2 lg:mx-5 my-5 lg:my-0">
 								<div className="flex flex-row mx-5">
-									<h3 className="w-1/2 dashboard-text font-bold">Categories</h3>
+									<h3 className="w-1/2 dashboard-text font-bold">Quizzes</h3>
 									<div className="ml-auto cursor-pointer">
 										<h3 className="dashboard-text font-normal">View All</h3>
 									</div>
@@ -209,6 +230,37 @@ const Welcome = () => {
 			</div>
 		</>
 	);
+};
+
+const SidebarButton = (props) => {
+	const { text, Icon, isSelected, toggleFunc } = props;
+	if (isSelected) {
+		return (
+			<div
+				onClick={toggleFunc}
+				className="cursor-pointer select-none text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto selected-nav"
+			>
+				<Icon size={30} className="mr-7 my-5" style={{ color: "#fff" }} />
+				<h3 className="my-auto text-white font-medium">{text}</h3>
+			</div>
+		);
+	}
+	return (
+		<div
+			onClick={toggleFunc}
+			className="cursor-pointer select-none text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto"
+		>
+			<Icon size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
+			<h3 className="my-auto dashboard-text font-medium">{text}</h3>
+		</div>
+	);
+};
+
+SidebarButton.propTypes = {
+	text: PropTypes.string.isRequired,
+	Icon: PropTypes.elementType.isRequired,
+	isSelected: PropTypes.bool,
+	toggleFunc: PropTypes.func.isRequired,
 };
 
 export default Welcome;
