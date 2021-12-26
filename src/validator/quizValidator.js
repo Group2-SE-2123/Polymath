@@ -22,11 +22,21 @@ const validateQuiz = checkSchema({
 	length: {
 		in: ["body"],
 		isInt: true,
-		errorMessage: "Quiz length must be an integer",
+		toInt: true,
+		isLength: {
+			options: { min: 1, max: 100 },
+			errorMessage: "Quiz length must be between 1 and 100",
+		},
+		errorMessage: "Quiz timeLimit must be an integer",
 	},
 	timeLimit: {
 		in: ["body"],
 		isInt: true,
+		toInt: true,
+		isLength: {
+			options: { min: 1, max: 100 },
+			errorMessage: "Quiz time limit must be between 1 and 100",
+		},
 		errorMessage: "Quiz timeLimit must be an integer",
 	},
 	imageUrl: {
