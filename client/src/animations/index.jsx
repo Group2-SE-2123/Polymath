@@ -50,7 +50,7 @@ function Scrolling() {
 NumberAnimation.propTypes = {
 	value: PropTypes.number.isRequired,
 	delay: PropTypes.number,
-	fixed: PropTypes.bool,
+	fixed: PropTypes.number,
 };
 
 export { NumberAnimation, Scrolling };

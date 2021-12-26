@@ -31,12 +31,13 @@ model Session {
 
 model Quiz {
   id        Int        @id @default(autoincrement())
-  userId    Int
-  user      User       @relation(fields: [userId], references: [id])
+  userId    Int?
+  user      User?      @relation(fields: [userId], references: [id])
   name      String
   details   String
   length    Int
   timeLimit Int
+  imageUrl  String
   question  Question[]
   record    Record[]
 }

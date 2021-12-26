@@ -1,18 +1,20 @@
 import prisma from "~/prisma/db";
 
-const createQuiz = async (json) => {
+const createQuiz = (quiz) => {
+	const { name, details, length, timeLimit, imageUrl } = quiz;
 	return prisma.quiz.create({
 		data: {
-			userId: json.userId,
-			name: json.name,
-			length: json.length,
-			question: json.question,
+			name,
+			details,
+			length,
+			timeLimit,
+			imageUrl,
 		},
 	});
 };
 
 const getAllQuiz = () => {
-	return prisma.question.findMany();
+	return prisma.quiz.findMany();
 };
 
 export { createQuiz, getAllQuiz };

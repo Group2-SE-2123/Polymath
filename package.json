@@ -24,7 +24,7 @@
 		}
 	},
 	"dependencies": {
-		"@prisma/client": "^3.5.0",
+		"@prisma/client": "^3.7.0",
 		"aws-sdk": "^2.1048.0",
 		"bcrypt": "^5.0.1",
 		"connect-flash": "^0.1.1",
@@ -68,7 +68,7 @@
 		"postcss": "^8.3.11",
 		"prettier": "^2.4.1",
 		"pretty-quick": "^3.1.2",
-		"prisma": "^3.6.0",
+		"prisma": "^3.7.0",
 		"supertest": "^6.1.6",
 		"tailwindcss": "^2.2.19"
 	}

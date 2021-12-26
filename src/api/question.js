@@ -7,7 +7,6 @@ import {
 	createQuestion,
 	getRandomQuestions,
 } from "../controller/question";
-import { createQuiz } from "../controller/quiz";
 import { validateQuestion } from "../validator/questionValidators";
 
 const router = express.Router();
@@ -45,21 +44,6 @@ router.post("/randomQuestions", (req, res) => {
 	getRandomQuestions(count)
 		.then((questions) => res.send(questions))
 		.catch((err) => res.status(400).send(err));
-});
-
-router.post("/createQuiz", async (req, res) => {
-	const quiz = req.body;
-
-	new Promise((resolve, reject) => {
-		if (quiz != null) {
-			resolve(quiz);
-		} else {
-			reject(res.status(400));
-		}
-	})
-		.then(createQuiz(quiz))
-		.then(() => res.status(201).json(quiz))
-		.catch((err) => res.send(err));
 });
 
 export default router;
