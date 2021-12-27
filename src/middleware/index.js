@@ -17,7 +17,7 @@ const uploadMiddleware = multer({
 		bucket: process.env.DO_SPACES_NAME,
 		acl: "public-read",
 		key(req, file, cb) {
-			cb(null, `${Date.now().toString()}-${file.originalname}`);
+			cb(null, `quizImages/${Date.now().toString()}-${file.originalname}`);
 		},
 	}),
 });

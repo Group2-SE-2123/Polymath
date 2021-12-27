@@ -39,15 +39,6 @@ const validateQuiz = checkSchema({
 		},
 		errorMessage: "Quiz timeLimit must be an integer",
 	},
-	imageUrl: {
-		in: ["body"],
-		isString: true,
-		trim: true,
-		isLength: {
-			options: { min: 3, max: 100 },
-			errorMessage: "Quiz imageUrl must be between 3 and 100 characters",
-		},
-	},
 });
 
 const sampleValidation = checkSchema({

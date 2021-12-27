@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useMutation } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import produce from "immer";
 import PropTypes from "prop-types";
@@ -18,10 +18,6 @@ import Navbar from "../Navbar";
 import Badge1 from "../../images/svg/Badge1.svg";
 import Badge2 from "../../images/svg/Badge2.svg";
 import Badge3 from "../../images/svg/Badge3.svg";
-import ArithmeticImg from "../../images/img/arithmetic.jpg";
-import AlgebraImg from "../../images/img/algebra.jpg";
-import GeometryImg from "../../images/img/geometry.jpg";
-import CalculusImg from "../../images/img/calculus.jpg";
 import ProfileImg from "../../images/img/profile.png";
 
 // Internal Imports
@@ -64,6 +60,15 @@ const Welcome = () => {
 			},
 		}
 	);
+
+	const quizzesQuery = useQuery("quiz_list", async () => {
+		return axios({
+			method: "GET",
+			url: "/api/quiz/getAll",
+		})
+			.then((res) => res.data)
+			.catch(() => null);
+	});
 
 	const logoutHandler = () => {
 		logoutMutation.mutate();
@@ -207,22 +212,21 @@ const Welcome = () => {
 								</div>
 								<div className="w-full p-4 bg-white shadow-2xl rounded-2xl">
 									<div className="grid grid-cols-2 gap-2 justify-center pt-5">
-										<div className="relative mx-auto">
-											<img className="h-40 w-40 mx-none rounded-3xl" src={ArithmeticImg} alt="" />
-											<h3 className="absolute text-white bottom-2 left-2 font-bold">Arithmetic</h3>
-										</div>
-										<div className="relative mx-auto">
-											<img className="h-40 w-40 mx-none rounded-3xl" src={AlgebraImg} alt="" />
-											<h3 className="absolute text-white bottom-2 left-2 font-bold">Algebra</h3>
-										</div>
-										<div className="relative mx-auto">
-											<img className="h-40 w-40 mx-none rounded-3xl" src={GeometryImg} alt="" />
-											<h3 className="absolute text-white bottom-2 left-2 font-bold">Geometry</h3>
-										</div>
-										<div className="relative mx-auto">
-											<img className="h-40 w-40 mx-none rounded-3xl" src={CalculusImg} alt="" />
-											<h3 className="absolute text-white bottom-2 left-2 font-bold">Calculus</h3>
-										</div>
+										{!quizzesQuery.isLoading &&
+											quizzesQuery.data.map((quiz) => {
+												return (
+													<div className="relative mx-auto" key={quiz.id}>
+														<img
+															className="h-40 w-40 mx-none rounded-3xl"
+															src={quiz.imageUrl}
+															alt=""
+														/>
+														<h3 className="absolute text-white bottom-2 left-2 font-bold">
+															{quiz.name}
+														</h3>
+													</div>
+												);
+											})}
 									</div>
 								</div>
 							</div>

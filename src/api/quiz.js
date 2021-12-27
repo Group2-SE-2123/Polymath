@@ -2,7 +2,7 @@ import express from "express";
 import { validationResult } from "express-validator";
 import { uploadMiddleware } from "../middleware";
 
-import { createQuiz } from "../controller/quiz";
+import { createQuiz, getAllQuiz } from "../controller/quiz";
 import { validateQuiz } from "../validator/quizValidator";
 
 const router = express.Router();
@@ -20,6 +20,13 @@ router.post("/createQuiz", uploadMiddleware.single("image"), validateQuiz, async
 	quiz.imageUrl = `${process.env.DO_CDN_ENDPOINT}/${req.file.key}`;
 	return createQuiz(quiz)
 		.then(res.send({ success: true }))
+		.catch((err) => res.status(400).send(err));
+});
+
+// get request to get all quizzes
+router.get("/getAll", (req, res) => {
+	getAllQuiz()
+		.then((quizzes) => res.send(quizzes))
 		.catch((err) => res.status(400).send(err));
 });
 

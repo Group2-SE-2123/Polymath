@@ -18,6 +18,7 @@ function Navbar() {
 
 	const userQuery = useQuery("user_details", async () => {
 		const sessionQuery = queryClient.getQueryData("session");
+		if (!sessionQuery) return null;
 		return axios({
 			method: "GET",
 			withCredentials: true,
