@@ -34,6 +34,13 @@ const transformQueryObject = (list) => {
 	return [isLoading, isError, hasData];
 };
 
+// function that takes in a list of objects
+// the object has a a key of 'state' which is a boolean and a key of 'component' which is an html element
+// the function loops through the list and returns the html element if the state is true
+const getComponent = (list) => {
+	return list.find((item) => item.state === true).component;
+};
+
 export {
 	getSecondsSince,
 	getRandomNumber,
@@ -41,4 +48,5 @@ export {
 	numberToLetter,
 	allTrue,
 	transformQueryObject,
+	getComponent,
 };
