@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { CenterModal, ModalTitle, ModalCloseTarget } from "react-spring-modal";
 import HeroIcon from "../../images/Hero.svg";
 
+import "react-spring-modal/styles.css";
+
 function Hero() {
+	const [isOpen, setOpen] = useState(false);
 	return (
 		<div className="relative bg-white overflow-hidden">
 			<div className="max-w-7xl mx-auto">
@@ -51,10 +55,12 @@ function Hero() {
 							>
 								We help you prepare for exams and quizzes
 							</p>
-							<div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+							<div
+								onClick={() => setOpen(true)}
+								className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start"
+							>
 								<div className="shadow-2xl">
-									<a
-										href="#"
+									<div
 										className="
                           w-full
                           flex
@@ -72,9 +78,15 @@ function Hero() {
                                 "
 									>
 										Start solving
-									</a>
+									</div>
 								</div>
 							</div>
+							<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)}>
+								<ModalTitle>My Center Modal</ModalTitle>
+								<ModalCloseTarget>
+									<button>Close</button>
+								</ModalCloseTarget>
+							</CenterModal>
 						</div>
 					</main>
 				</div>
