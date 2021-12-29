@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { CenterModal, ModalTitle, ModalCloseTarget } from "react-spring-modal";
+import Modal from "./Modal";
 import HeroIcon from "../../images/Hero.svg";
 
 import "react-spring-modal/styles.css";
 
 function Hero() {
-	const [isOpen, setOpen] = useState(false);
+	const [isOpen, setOpen] = useState(true);
 	return (
 		<div className="relative bg-white overflow-hidden">
 			<div className="max-w-7xl mx-auto">
@@ -59,7 +59,7 @@ function Hero() {
 								onClick={() => setOpen(true)}
 								className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start"
 							>
-								<div className="shadow-2xl">
+								<div className="select-none shadow-2xl">
 									<div
 										className="
                           w-full
@@ -81,12 +81,7 @@ function Hero() {
 									</div>
 								</div>
 							</div>
-							<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)}>
-								<ModalTitle>My Center Modal</ModalTitle>
-								<ModalCloseTarget>
-									<button>Close</button>
-								</ModalCloseTarget>
-							</CenterModal>
+							<Modal isOpen={isOpen} setOpen={setOpen} />
 						</div>
 					</main>
 				</div>

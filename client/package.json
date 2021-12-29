@@ -13,6 +13,7 @@
 		"@heroicons/react": "^1.0.5",
 		"@notus-pro/react": "^1.0.1",
 		"@popperjs/core": "^2.11.0",
+		"@use-gesture/react": "^10.2.4",
 		"@vitejs/plugin-react": "^1.1.0",
 		"axios": "^0.24.0",
 		"immer": "^9.0.7",

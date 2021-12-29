@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSpring, animated } from "react-spring";
+import { useDrag } from "@use-gesture/react";
 
 import PropTypes from "prop-types";
 
@@ -47,10 +48,28 @@ function Scrolling() {
 	);
 }
 
+function PullRelease(props) {
+	const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }));
+
+	const bind = useDrag(({ down, movement: [mx, my] }) => {
+		api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down, pointer: { touch: true } });
+	});
+
+	return (
+		<animated.div {...bind()} style={{ x, y, touchAction: "none" }}>
+			{props.children}
+		</animated.div>
+	);
+}
+
 NumberAnimation.propTypes = {
 	value: PropTypes.number.isRequired,
 	delay: PropTypes.number,
 	fixed: PropTypes.number,
 };
 
-export { NumberAnimation, Scrolling };
+PullRelease.propTypes = {
+	children: PropTypes.node.isRequired,
+};
+
+export { NumberAnimation, Scrolling, PullRelease };
