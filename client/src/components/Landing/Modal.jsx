@@ -11,6 +11,7 @@ import "./style.scss";
 const style = {
 	width: "100%",
 	height: "100%",
+	overflow: "auto",
 };
 
 function Modal(props) {
@@ -58,12 +59,23 @@ function Modal(props) {
 				<h3>Select at least 3 topics to start the quiz</h3>
 				<div className="flex flex-wrap justify-center my-10 select-none">
 					{topicsState.map((topic) => {
-						const bgColor = topic.selected ? "bg-yellow-300" : "theme-color hover:bg-gray-300";
+						if (topic.selected) {
+							return (
+								<PullRelease key={topic.id}>
+									<div className={`flex flex-row text-center text-gray-800 font-bold mx-5 my-2`}>
+										<h3 className="bg-yellow-300 py-1 px-2">{topic.name}</h3>
+										<div className="bg-black py-1 px-1" onClickCapture={() => clickTag(topic.id)}>
+											<CgClose style={{ fontSize: "25px", marginLeft: "auto", color: "#D1D1D1" }} />
+										</div>
+									</div>
+								</PullRelease>
+							);
+						}
 						return (
 							<PullRelease key={topic.id}>
 								<div
-									onMouseDown={() => clickTag(topic.id)}
-									className={`text-center text-gray-800 font-bold ${bgColor} mx-5 my-2 py-1 px-2`}
+									onClickCapture={() => clickTag(topic.id)}
+									className={`text-center text-gray-800 font-bold theme-color hover:bg-gray-300 mx-5 my-2 py-1 px-2`}
 								>
 									<h3>{topic.name}</h3>
 								</div>
