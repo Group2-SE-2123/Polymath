@@ -5,7 +5,7 @@ import HeroIcon from "../../images/Hero.svg";
 import "react-spring-modal/styles.css";
 
 function Hero() {
-	const [isOpen, setOpen] = useState(true);
+	const [isOpen, setOpen] = useState(false);
 	return (
 		<div className="relative bg-white overflow-hidden">
 			<div className="max-w-7xl mx-auto">

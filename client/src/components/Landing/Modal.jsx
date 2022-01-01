@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import immer from "immer";
 import PropTypes from "prop-types";
 import { CenterModal, ModalCloseTarget } from "react-spring-modal";
 import { CgClose } from "react-icons/cg";
+import { useTransition, useSpringRef } from "react-spring";
 
 // Internal Imports
 import { PullRelease } from "../../animations";
@@ -35,7 +36,19 @@ function Modal(props) {
 	});
 
 	// Hooks
-	const [topicsState, setTopicsState] = React.useState(initialState);
+	const [topicsState, setTopicsState] = useState(initialState);
+	const [index, set] = useState(0);
+	const onClick = useCallback(() => {
+		set((state) => (state + 1) % 2);
+	}, []);
+	const transRef = useSpringRef();
+	const transitions = useTransition(index, {
+		ref: transRef,
+		keys: null,
+	});
+	useEffect(() => {
+		transRef.start();
+	}, [index]);
 
 	// Functions
 	const clickTag = (id) => {
@@ -49,6 +62,30 @@ function Modal(props) {
 		setTopicsState(newState);
 	};
 
+	const modals = [
+		() => (
+			<TopicModal
+				isOpen={isOpen}
+				setOpen={setOpen}
+				topicsState={topicsState}
+				clickTag={clickTag}
+				onClick={onClick}
+			/>
+		),
+		() => <NumberModal onClick={onClick} isOpen={isOpen} setOpen={setOpen} />,
+	];
+
+	return (
+		<>
+			{transitions((_, i) => {
+				const ModalGroup = modals[i];
+				return <ModalGroup />;
+			})}
+		</>
+	);
+}
+
+const TopicModal = ({ isOpen, setOpen, topicsState, clickTag, onClick }) => {
 	return (
 		<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)} contentProps={{ style }}>
 			<div className="flex flex-col w-full items-center">
@@ -83,7 +120,7 @@ function Modal(props) {
 						);
 					})}
 				</div>
-				<div className="sm:flex sm:justify-center lg:justify-start ml-auto">
+				<div onClick={onClick} className="sm:flex sm:justify-center lg:justify-start ml-auto">
 					<div className="select-none shadow-2xl">
 						<div className="w-full flex items-center justify-center px-10 py-2 border border-transparent text-base font-medium text-white color-linear filled-button-linear md:text-lg">
 							Next
@@ -93,11 +130,40 @@ function Modal(props) {
 			</div>
 		</CenterModal>
 	);
-}
+};
+
+const NumberModal = ({ onClick, isOpen, setOpen }) => {
+	return (
+		<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)}>
+			Number
+			<div onClick={onClick} className="sm:flex sm:justify-center lg:justify-start ml-auto">
+				<div className="select-none shadow-2xl">
+					<div className="w-full flex items-center justify-center px-10 py-2 border border-transparent text-base font-medium text-white color-linear filled-button-linear md:text-lg">
+						Next
+					</div>
+				</div>
+			</div>
+		</CenterModal>
+	);
+};
 
 Modal.propTypes = {
 	isOpen: PropTypes.bool.isRequired,
 	setOpen: PropTypes.func.isRequired,
+};
+
+TopicModal.propTypes = {
+	isOpen: PropTypes.bool.isRequired,
+	setOpen: PropTypes.func.isRequired,
+	topicsState: PropTypes.array.isRequired,
+	clickTag: PropTypes.func.isRequired,
+	onClick: PropTypes.func.isRequired,
+};
+
+NumberModal.propTypes = {
+	isOpen: PropTypes.bool.isRequired,
+	setOpen: PropTypes.func.isRequired,
+	onClick: PropTypes.func.isRequired,
 };
 
 export default Modal;
