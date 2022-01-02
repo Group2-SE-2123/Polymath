@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Slider, ThemeProvider, createTheme } from "@mui/material";
 
 const valuetext = (value) => {
@@ -14,13 +14,20 @@ const theme = createTheme({
 });
 
 const NumberSlider = () => {
+	const [value, setValue] = useState(5);
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Box sx={{ width: 300, my: 5, ml: "auto" }}>
 				<Slider
+					value={value}
+					onChange={handleChange}
 					sx={{ color: "main.background" }}
 					aria-label="Temperature"
-					defaultValue={30}
+					defaultValue={5}
 					getAriaValueText={valuetext}
 					valueLabelDisplay="on"
 					step={5}

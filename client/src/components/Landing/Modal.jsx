@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from "react";
-import immer from "immer";
+import React, { useState, useCallback, useEffect, useContext } from "react";
+import produce from "immer";
 import PropTypes from "prop-types";
 import { CenterModal, ModalCloseTarget } from "react-spring-modal";
 import { CgClose } from "react-icons/cg";
@@ -9,6 +9,7 @@ import { useTransition, useSpringRef } from "react-spring";
 import { PullRelease } from "../../animations";
 import NumberSlider from "./NumberSlider";
 import DifficultySelect from "./DifficultySelect";
+import { ModalContext } from "../../context/ModalContext";
 import "./style.scss";
 
 const style = {
@@ -20,7 +21,6 @@ const style = {
 function Modal(props) {
 	const { isOpen, setOpen } = props;
 
-	// mathTopics array with objects containing key 'name'
 	const mathTopics = [
 		{ id: 1, name: "Algebra" },
 		{ id: 2, name: "Geometry" },
@@ -39,6 +39,7 @@ function Modal(props) {
 
 	// Hooks
 	const [topicsState, setTopicsState] = useState(initialState);
+	const [modalState, setModalState] = useContext(ModalContext);
 	const [index, set] = useState(0);
 	const onClick = useCallback(() => {
 		set((state) => (state + 1) % 2);
@@ -51,10 +52,17 @@ function Modal(props) {
 	useEffect(() => {
 		transRef.start();
 	}, [index]);
+	useEffect(() => {
+		setModalState(
+			produce(modalState, (draft) => {
+				draft.topicsState = topicsState;
+			})
+		);
+	}, [topicsState]);
 
 	// Functions
 	const clickTag = (id) => {
-		const newState = immer(topicsState, (draft) => {
+		const newState = produce(topicsState, (draft) => {
 			draft.forEach((topic) => {
 				if (topic.id === id) {
 					topic.selected = !topic.selected;
