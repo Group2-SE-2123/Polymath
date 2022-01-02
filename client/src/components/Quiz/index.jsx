@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 // Icons
@@ -57,6 +58,11 @@ function Quiz() {
 
 	// Hooks
 	const [index, setIndex] = useState(0);
+	const location = useLocation();
+
+	useEffect(() => {
+		console.log(location.state);
+	}, []);
 
 	// Normal Fns
 	const nextQuestion = () => {

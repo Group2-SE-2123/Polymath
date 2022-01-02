@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useImperativeHandle } from "react";
 import { Box, Slider, ThemeProvider, createTheme } from "@mui/material";
+import PropTypes from "prop-types";
 
 const valuetext = (value) => {
 	return value;
@@ -13,8 +14,17 @@ const theme = createTheme({
 	},
 });
 
-const NumberSlider = () => {
-	const [value, setValue] = useState(5);
+const NumberSlider = ({ refProps }) => {
+	const [value, setValue] = useState(refProps.current);
+
+	useImperativeHandle(
+		refProps,
+		() => ({
+			value,
+		}),
+		[value]
+	);
+
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -38,6 +48,10 @@ const NumberSlider = () => {
 			</Box>
 		</ThemeProvider>
 	);
+};
+
+NumberSlider.propTypes = {
+	refProps: PropTypes.object,
 };
 
 export default NumberSlider;

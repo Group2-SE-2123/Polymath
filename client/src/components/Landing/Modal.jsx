@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import produce from "immer";
 import PropTypes from "prop-types";
 import { CenterModal, ModalCloseTarget } from "react-spring-modal";
 import { CgClose } from "react-icons/cg";
 import { useTransition, useSpringRef } from "react-spring";
+import { useNavigate } from "react-router-dom";
 
 // Internal Imports
 import { PullRelease } from "../../animations";
@@ -41,9 +42,6 @@ function Modal(props) {
 	const [topicsState, setTopicsState] = useState(initialState);
 	const [modalState, setModalState] = useContext(ModalContext);
 	const [index, set] = useState(0);
-	const onClick = useCallback(() => {
-		set((state) => (state + 1) % 2);
-	}, []);
 	const transRef = useSpringRef();
 	const transitions = useTransition(index, {
 		ref: transRef,
@@ -79,10 +77,10 @@ function Modal(props) {
 				setOpen={setOpen}
 				topicsState={topicsState}
 				clickTag={clickTag}
-				onClick={onClick}
+				setState={set}
 			/>
 		),
-		() => <NumberModal onClick={onClick} isOpen={isOpen} setOpen={setOpen} />,
+		() => <NumberModal isOpen={isOpen} setOpen={setOpen} />,
 	];
 
 	return (
@@ -95,7 +93,10 @@ function Modal(props) {
 	);
 }
 
-const TopicModal = ({ isOpen, setOpen, topicsState, clickTag, onClick }) => {
+const TopicModal = ({ isOpen, setOpen, topicsState, clickTag, setState }) => {
+	const onClick = () => {
+		setState(1);
+	};
 	return (
 		<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)} contentProps={{ style }}>
 			<div className="flex flex-col w-full items-center">
@@ -142,7 +143,17 @@ const TopicModal = ({ isOpen, setOpen, topicsState, clickTag, onClick }) => {
 	);
 };
 
-const NumberModal = ({ onClick, isOpen, setOpen }) => {
+const NumberModal = ({ isOpen, setOpen }) => {
+	const navigate = useNavigate();
+	const sliderRef = useRef(5);
+	const [modalState] = useContext(ModalContext);
+
+	const onClick = async () => {
+		const newState = produce(modalState, (draft) => {
+			draft.sliderState = sliderRef.current.value;
+		});
+		navigate("/quiz", { state: newState });
+	};
 	return (
 		<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)} contentProps={{ style }}>
 			<div className="flex flex-col w-full items-center">
@@ -153,7 +164,7 @@ const NumberModal = ({ onClick, isOpen, setOpen }) => {
 				<h3>Pick the number of questions and difficulty</h3>
 				<div className="flex flex-row w-full mt-2">
 					<h3 className="my-auto font-semibold mx-auto md:mx-0">Number of questions:</h3>
-					<NumberSlider />
+					<NumberSlider refProps={sliderRef} />
 				</div>
 				<div className="flex flex-row w-full mt-2 mb-10">
 					<h3 className="my-auto font-semibold mx-auto md:mx-0">Choose Difficulty:</h3>
@@ -181,13 +192,12 @@ TopicModal.propTypes = {
 	setOpen: PropTypes.func.isRequired,
 	topicsState: PropTypes.array.isRequired,
 	clickTag: PropTypes.func.isRequired,
-	onClick: PropTypes.func.isRequired,
+	setState: PropTypes.func.isRequired,
 };
 
 NumberModal.propTypes = {
 	isOpen: PropTypes.bool.isRequired,
 	setOpen: PropTypes.func.isRequired,
-	onClick: PropTypes.func.isRequired,
 };
 
 export default Modal;
