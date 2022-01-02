@@ -9,9 +9,12 @@
 		"lint:fix": "eslint --fix"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.7.1",
+		"@emotion/styled": "^11.6.0",
 		"@headlessui/react": "^1.4.2",
 		"@heroicons/react": "^1.0.5",
-		"@notus-pro/react": "^1.0.1",
+		"@mui/material": "^5.2.6",
+		"@mui/styles": "^5.2.3",
 		"@popperjs/core": "^2.11.0",
 		"@use-gesture/react": "^10.2.4",
 		"@vitejs/plugin-react": "^1.1.0",

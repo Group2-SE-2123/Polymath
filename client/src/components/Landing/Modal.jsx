@@ -7,6 +7,8 @@ import { useTransition, useSpringRef } from "react-spring";
 
 // Internal Imports
 import { PullRelease } from "../../animations";
+import NumberSlider from "./NumberSlider";
+import DifficultySelect from "./DifficultySelect";
 import "./style.scss";
 
 const style = {
@@ -134,12 +136,26 @@ const TopicModal = ({ isOpen, setOpen, topicsState, clickTag, onClick }) => {
 
 const NumberModal = ({ onClick, isOpen, setOpen }) => {
 	return (
-		<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)}>
-			Number
-			<div onClick={onClick} className="sm:flex sm:justify-center lg:justify-start ml-auto">
-				<div className="select-none shadow-2xl">
-					<div className="w-full flex items-center justify-center px-10 py-2 border border-transparent text-base font-medium text-white color-linear filled-button-linear md:text-lg">
-						Next
+		<CenterModal isOpen={isOpen} onDismiss={() => setOpen(false)} contentProps={{ style }}>
+			<div className="flex flex-col w-full items-center">
+				<ModalCloseTarget>
+					<CgClose style={{ fontSize: "25px", marginLeft: "auto", color: "#D1D1D1" }} />
+				</ModalCloseTarget>
+				<h1 className="font-normal mt-4 text-4xl font-roboto">More Quiz Details</h1>
+				<h3>Pick the number of questions and difficulty</h3>
+				<div className="flex flex-row w-full mt-2">
+					<h3 className="my-auto font-semibold mx-auto md:mx-0">Number of questions:</h3>
+					<NumberSlider />
+				</div>
+				<div className="flex flex-row w-full mt-2 mb-10">
+					<h3 className="my-auto font-semibold mx-auto md:mx-0">Choose Difficulty:</h3>
+					<DifficultySelect />
+				</div>
+				<div onClick={onClick} className="sm:flex sm:justify-center lg:justify-start ml-auto">
+					<div className="select-none shadow-2xl">
+						<div className="w-full flex items-center justify-center px-10 py-2 border border-transparent text-base font-medium text-white color-linear filled-button-linear md:text-lg">
+							Next
+						</div>
 					</div>
 				</div>
 			</div>
