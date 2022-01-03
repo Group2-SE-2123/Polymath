@@ -13,11 +13,15 @@ const getQuestionById = (id) => {
 };
 
 const createQuestion = (question) => {
-	const { text, category, difficulty, choices } = question;
+	const { text, categoryId, difficulty, choices } = question;
 	return prisma.question.create({
 		data: {
 			text,
-			category,
+			category: {
+				connect: {
+					id: categoryId,
+				},
+			},
 			difficulty,
 			choice: {
 				create: choices,
@@ -55,7 +59,7 @@ const getRandomQuestions = async (count) => {
 			},
 		},
 	});
-	const randomQuestions = questions.sort(() => 0.5 - Math.random()).slice(count);
+	const randomQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, count);
 	return randomQuestions;
 };
 

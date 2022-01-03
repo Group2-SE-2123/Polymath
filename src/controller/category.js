@@ -20,4 +20,8 @@ const editCategory = (categoryId, newName) => {
 	});
 };
 
-export { createCategory, editCategory };
+const getAllCategories = () => {
+	return prisma.category.findMany();
+};
+
+export { createCategory, editCategory, getAllCategories };

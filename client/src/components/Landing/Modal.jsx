@@ -3,6 +3,8 @@ import produce from "immer";
 import PropTypes from "prop-types";
 import { CenterModal, ModalCloseTarget } from "react-spring-modal";
 import { CgClose } from "react-icons/cg";
+import { useQuery } from "react-query";
+import axios from "axios";
 import { useTransition, useSpringRef } from "react-spring";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +13,7 @@ import { PullRelease } from "../../animations";
 import NumberSlider from "./NumberSlider";
 import DifficultySelect from "./DifficultySelect";
 import { ModalContext } from "../../context/ModalContext";
+import queryClient from "../../config/queryClient";
 import "./style.scss";
 
 const style = {
@@ -22,24 +25,30 @@ const style = {
 function Modal(props) {
 	const { isOpen, setOpen } = props;
 
-	const mathTopics = [
-		{ id: 1, name: "Algebra" },
-		{ id: 2, name: "Geometry" },
-		{ id: 3, name: "Trigonometry" },
-		{ id: 4, name: "Calculus" },
-		{ id: 5, name: "Statistics" },
-		{ id: 6, name: "Probability" },
-		{ id: 7, name: "Differential Equations" },
-		{ id: 8, name: "Linear Algebra" },
-		{ id: 9, name: "Differential Calculus" },
-	];
+	// const mathTopics = [
+	// 	{ id: 1, name: "Algebra" },
+	// 	{ id: 2, name: "Geometry" },
+	// 	{ id: 3, name: "Trigonometry" },
+	// 	{ id: 4, name: "Calculus" },
+	// 	{ id: 5, name: "Statistics" },
+	// 	{ id: 6, name: "Probability" },
+	// 	{ id: 7, name: "Differential Equations" },
+	// 	{ id: 8, name: "Linear Algebra" },
+	// 	{ id: 9, name: "Differential Calculus" },
+	// ];
 
-	const initialState = mathTopics.map((topic) => {
-		return { ...topic, selected: false };
-	});
+	const fetchCategories = async () => {
+		return axios({
+			method: "GET",
+			url: "/api/category/getAll",
+		}).then((categories) => {
+			return categories.data;
+		});
+	};
 
-	// Hooks
-	const [topicsState, setTopicsState] = useState(initialState);
+	const categoryQuery = useQuery("category", fetchCategories);
+	const topicsState = categoryQuery.data != null ? categoryQuery.data : [];
+
 	const [modalState, setModalState] = useContext(ModalContext);
 	const [index, set] = useState(0);
 	const transRef = useSpringRef();
@@ -67,7 +76,7 @@ function Modal(props) {
 				}
 			});
 		});
-		setTopicsState(newState);
+		queryClient.setQueryData("category", newState);
 	};
 
 	const modals = [

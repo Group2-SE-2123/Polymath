@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -17,6 +17,9 @@ import CardChoice from "./CardChoice";
 import { getUpdatedCounter, transformQueryObject } from "../../helper";
 
 function Quiz() {
+	const location = useLocation();
+	const { sliderState } = location.state;
+
 	// Fetch Fns
 	const fetchQuestions = async (count) => {
 		return axios({
@@ -31,13 +34,13 @@ function Quiz() {
 	// React Queries
 	const timerQuery = useQuery("timer", () => {
 		return {
-			counter: 10000,
+			counter: sliderState * 60,
 			initialTime: new Date(),
 		};
 	});
 	const quizQuery = useQuery("quiz", () =>
 		fetchQuestions({
-			count: 5,
+			count: sliderState,
 		})
 	);
 	const selectionQuery = useQuery(
@@ -58,11 +61,6 @@ function Quiz() {
 
 	// Hooks
 	const [index, setIndex] = useState(0);
-	const location = useLocation();
-
-	useEffect(() => {
-		console.log(location.state);
-	}, []);
 
 	// Normal Fns
 	const nextQuestion = () => {

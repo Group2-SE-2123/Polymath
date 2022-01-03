@@ -10,14 +10,11 @@ const validateQuestion = checkSchema({
 			errorMessage: "Question text must be between 5 and 100 characters",
 		},
 	},
-	category: {
+	categoryId: {
 		in: ["body"],
-		isString: true,
-		trim: true,
-		isLength: {
-			options: { min: 3, max: 30 },
-			errorMessage: "Category must be between 3 and 30 characters",
-		},
+		isInt: true,
+		toInt: true,
+		errorMessage: "CategoryId must be an integer",
 	},
 	difficulty: {
 		in: ["body"],
