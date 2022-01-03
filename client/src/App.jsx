@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import RequireAuth from "./auth/RequireAuth";
+import RequireDetails from "./auth/RequireDetails";
 
 import Landing from "./components/Landing";
 import Login from "./components/Login";
@@ -26,7 +27,14 @@ function App() {
 						</RequireAuth>
 					}
 				></Route>
-				<Route path="/quiz" element={<Quiz />}></Route>
+				<Route
+					path="/quiz"
+					element={
+						<RequireDetails>
+							<Quiz />
+						</RequireDetails>
+					}
+				></Route>
 				<Route path="*" element={<NotFound />} />
 				<Route path="/sample" element={<Sample />}></Route>
 			</Routes>
