@@ -18,7 +18,11 @@ import ScoreModal from "./ScoreModal";
 import { getUpdatedCounter, transformQueryObject } from "../../helper";
 
 function Quiz() {
+	// Hooks
+	const [index, setIndex] = useState(0);
 	const location = useLocation();
+	const [isOpenScore, setIsOpenScore] = useState(false);
+	const [score, setScore] = useState(0);
 	const { sliderState } = location.state;
 
 	// Fetch Fns
@@ -60,29 +64,34 @@ function Quiz() {
 		}
 	);
 
-	const submitQuizMutation = useMutation(async (selectedChoices) => {
-		return axios({
-			method: "POST",
-			data: {
-				selectedChoices,
+	const submitQuizMutation = useMutation(
+		async (selectedChoices) => {
+			return axios({
+				method: "POST",
+				data: {
+					selectedChoices,
+				},
+				withCredentials: true,
+				url: "/api/quiz/submitQuiz",
+			}).then((res) => {
+				return res.data;
+			});
+		},
+		{
+			onSuccess: (data) => {
+				const totalScore = data.reduce((acc, curr) => {
+					return acc + curr.isCorrect;
+				}, 0);
+				setScore(totalScore);
 			},
-			withCredentials: true,
-			url: "/api/quiz/submitQuiz",
-		}).then((res) => {
-			console.log(res.data);
-			return res.data;
-		});
-	});
+		}
+	);
 
 	const [hasLoaded, hasError, hasData] = transformQueryObject([
 		timerQuery,
 		quizQuery,
 		selectionQuery,
 	]);
-
-	// Hooks
-	const [index, setIndex] = useState(0);
-	const [isOpenScore, setIsOpenScore] = useState(false);
 
 	// Normal Fns
 	const nextQuestion = () => {
@@ -104,10 +113,10 @@ function Quiz() {
 		return selectionQuery.data[pageIndex] === orderIndex;
 	};
 
-	const submitQuiz = () => {
+	const submitQuiz = async () => {
 		const selectedChoices = quizQuery.data.map((question, questionIndex) => {
 			const selectedChoiceOrder = selectionQuery.data[questionIndex];
-			if (!selectedChoiceOrder) {
+			if (selectedChoiceOrder === null) {
 				return {
 					questionId: question.id,
 					choiceId: -1,
@@ -179,7 +188,12 @@ function Quiz() {
 									</button>
 								)}
 							</section>
-							<ScoreModal isOpenScore={isOpenScore} setIsOpenScore={setIsOpenScore} />
+							<ScoreModal
+								totalScore={score}
+								totalQuestions={quizQuery.data.length}
+								isOpenScore={isOpenScore}
+								setIsOpenScore={setIsOpenScore}
+							/>
 						</>
 					)}
 				</>

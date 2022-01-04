@@ -12,10 +12,11 @@ const style = {
 	borderRadius: "0px",
 };
 
-function ScoreModal({ isOpenScore, setIsOpenScore }) {
+function ScoreModal({ isOpenScore, setIsOpenScore, totalScore, totalQuestions }) {
 	const closeModal = () => {
 		setIsOpenScore(false);
 	};
+
 	return (
 		<CenterModal isOpen={isOpenScore} onDismiss={closeModal} contentProps={{ style }}>
 			<div className="absolute sm:top-1/2 sm:left-1/2 transform sm:-translate-x-1/2 sm:-translate-y-1/2">
@@ -27,7 +28,7 @@ function ScoreModal({ isOpenScore, setIsOpenScore }) {
 				/>
 			</div>
 			<div className="relative font-roboto text-white text-4xl text-center mt-24">Your Score</div>
-			<Fraction numerator={1} denominator={2} />
+			<Fraction numerator={totalScore} denominator={totalQuestions} />
 		</CenterModal>
 	);
 }
@@ -47,6 +48,8 @@ const Fraction = ({ numerator, denominator }) => {
 ScoreModal.propTypes = {
 	isOpenScore: PropTypes.bool.isRequired,
 	setIsOpenScore: PropTypes.func.isRequired,
+	totalScore: PropTypes.number.isRequired,
+	totalQuestions: PropTypes.number.isRequired,
 };
 
 Fraction.propTypes = {
