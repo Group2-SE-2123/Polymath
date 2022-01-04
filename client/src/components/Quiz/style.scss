@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
 $gray: #d1d1d1;
 $yellow: #fcc822;
@@ -13,6 +14,10 @@ $white: #fff;
 		background-color: $gray;
 		color: $black;
 	}
+}
+
+.font-roboto {
+	font-family: "Roboto", sans-serif;
 }
 
 .question-section {

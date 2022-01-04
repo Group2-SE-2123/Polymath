@@ -25,18 +25,6 @@ const style = {
 function Modal(props) {
 	const { isOpen, setOpen } = props;
 
-	// const mathTopics = [
-	// 	{ id: 1, name: "Algebra" },
-	// 	{ id: 2, name: "Geometry" },
-	// 	{ id: 3, name: "Trigonometry" },
-	// 	{ id: 4, name: "Calculus" },
-	// 	{ id: 5, name: "Statistics" },
-	// 	{ id: 6, name: "Probability" },
-	// 	{ id: 7, name: "Differential Equations" },
-	// 	{ id: 8, name: "Linear Algebra" },
-	// 	{ id: 9, name: "Differential Calculus" },
-	// ];
-
 	const fetchCategories = async () => {
 		return axios({
 			method: "GET",

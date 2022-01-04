@@ -14,6 +14,7 @@ import "./style.scss";
 // Internal Imports
 import Timer from "./Timer";
 import CardChoice from "./CardChoice";
+import ScoreModal from "./ScoreModal";
 import { getUpdatedCounter, transformQueryObject } from "../../helper";
 
 function Quiz() {
@@ -34,7 +35,7 @@ function Quiz() {
 	// React Queries
 	const timerQuery = useQuery("timer", () => {
 		return {
-			counter: sliderState * 60,
+			counter: sliderState * 1000,
 			initialTime: new Date(),
 		};
 	});
@@ -61,6 +62,7 @@ function Quiz() {
 
 	// Hooks
 	const [index, setIndex] = useState(0);
+	const [isOpenScore, setIsOpenScore] = useState(false);
 
 	// Normal Fns
 	const nextQuestion = () => {
@@ -118,14 +120,25 @@ function Quiz() {
 									Previous
 								</button>
 								<Timer initialTime={getCounterTime()} />
-								<button
-									onClick={nextQuestion}
-									className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
-								>
-									Next
-									<GoTriangleRight className="my-auto" />
-								</button>
+								{index === sliderState - 1 ? (
+									<button
+										onClick={() => setIsOpenScore(true)}
+										className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
+									>
+										Submit
+										<GoTriangleRight className="my-auto" />
+									</button>
+								) : (
+									<button
+										onClick={nextQuestion}
+										className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
+									>
+										Next
+										<GoTriangleRight className="my-auto" />
+									</button>
+								)}
 							</section>
+							<ScoreModal isOpenScore={isOpenScore} setIsOpenScore={setIsOpenScore} />
 						</>
 					)}
 				</>
