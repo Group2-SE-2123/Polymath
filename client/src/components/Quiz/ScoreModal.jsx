@@ -27,14 +27,31 @@ function ScoreModal({ isOpenScore, setIsOpenScore }) {
 				/>
 			</div>
 			<div className="relative font-roboto text-white text-4xl text-center mt-24">Your Score</div>
-			<div className="relative font-roboto text-white text-9xl text-center mt-5">4</div>
+			<Fraction numerator={1} denominator={2} />
 		</CenterModal>
 	);
 }
 
+const Fraction = ({ numerator, denominator }) => {
+	return (
+		<div className="select-none relative font-roboto text-white text-center mt-5">
+			<div className="flex flex-row mx-auto w-full">
+				<div className="text-7xl ml-auto">{numerator}</div>
+				<div className="text-9xl mt-2">/</div>
+				<div className="text-7xl mt-auto mr-auto">{denominator}</div>
+			</div>
+		</div>
+	);
+};
+
 ScoreModal.propTypes = {
 	isOpenScore: PropTypes.bool.isRequired,
 	setIsOpenScore: PropTypes.func.isRequired,
+};
+
+Fraction.propTypes = {
+	numerator: PropTypes.number.isRequired,
+	denominator: PropTypes.number.isRequired,
 };
 
 export default ScoreModal;

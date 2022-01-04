@@ -28,7 +28,7 @@ const Timer = ({ initialTime }) => {
 
 	return (
 		<>
-			<div className="flex mx-auto relative">
+			<div className="flex mx-auto relative select-none">
 				<ReactSVG className="mx-auto" src={Clock} />
 				<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{time}

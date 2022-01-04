@@ -95,7 +95,7 @@ function Quiz() {
 				<>
 					{hasData && (
 						<>
-							<div className="flex question-section container mx-auto h-60 my-10">
+							<div className="flex question-section container mx-auto h-60 my-10 select-none">
 								<h1 className="m-auto text-4xl question-text">{quizQuery.data[index].text}</h1>
 							</div>
 							<section className="container mx-auto flex flex-wrap">

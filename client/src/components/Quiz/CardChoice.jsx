@@ -43,7 +43,7 @@ const CardChoice = ({ props, length, order, pageIndex, isSelected }) => {
 
 	return (
 		<div onClick={() => chooseCard({ order, pageIndex })} className={cardDimensions}>
-			<div className="flex flex-col items-center">
+			<div className="flex flex-col items-center select-none cursor-pointer">
 				<div className="md:w-64 w-full h-40">
 					<Transition
 						as={Fragment}
