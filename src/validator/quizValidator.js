@@ -53,4 +53,40 @@ const sampleValidation = checkSchema({
 	},
 });
 
-export { validateQuiz, sampleValidation };
+const quizSubmissionValidation = checkSchema({
+	selectedChoices: {
+		in: ["body"],
+		isArray: true,
+		custom: {
+			options: (value) => {
+				if (value.length > 0) {
+					const questionIds = value.map(({ questionId }) => questionId);
+					const choiceIds = value.map(({ choiceId }) => choiceId);
+					const questionIdsAreInt = questionIds.every(Number.isInteger);
+					const choiceIdsAreValid = choiceIds.every(
+						(choiceId) => choiceId === "" || Number.isInteger(choiceId) || choiceId === null
+					);
+					const questionIdsAreValid = questionIdsAreInt;
+					const questionIdsAreUnique = [...new Set(questionIds)];
+					const questionIdsAreUniqueLength = questionIdsAreUnique.length;
+					const questionIdsAreUniqueLengthIsValid =
+						questionIdsAreUniqueLength === questionIds.length;
+					return questionIdsAreValid && choiceIdsAreValid && questionIdsAreUniqueLengthIsValid;
+				}
+				return false;
+			},
+		},
+		customSanitizer: {
+			options: (value) => {
+				return value.map(({ questionId, choiceId }) => {
+					if (choiceId === null || !Number.isInteger(choiceId)) {
+						return { questionId, choiceId: -1 };
+					}
+					return { questionId, choiceId };
+				});
+			},
+		},
+	},
+});
+
+export { validateQuiz, sampleValidation, quizSubmissionValidation };

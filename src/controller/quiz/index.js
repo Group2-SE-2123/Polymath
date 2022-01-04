@@ -17,4 +17,33 @@ const getAllQuiz = () => {
 	return prisma.quiz.findMany();
 };
 
-export { createQuiz, getAllQuiz };
+const checkAnswer = async (questionId, choiceId) => {
+	const choice = await prisma.choice.findFirst({
+		where: {
+			questionId,
+			id: choiceId,
+		},
+	});
+	return choice.isCorrect;
+};
+
+const checkAnswers = async (answers) => {
+	return prisma.choice
+		.findMany({
+			where: {
+				id: {
+					in: answers.map((answer) => answer.choiceId),
+				},
+			},
+		})
+		.then((choices) => {
+			return choices.map((choice) => {
+				return {
+					questionId: choice.questionId,
+					isCorrect: choice.isCorrect,
+				};
+			});
+		});
+};
+
+export { createQuiz, getAllQuiz, checkAnswer, checkAnswers };

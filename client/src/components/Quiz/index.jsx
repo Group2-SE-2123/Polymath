@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -33,12 +33,6 @@ function Quiz() {
 	};
 
 	// React Queries
-	const timerQuery = useQuery("timer", () => {
-		return {
-			counter: sliderState * 1000,
-			initialTime: new Date(),
-		};
-	});
 	const quizQuery = useQuery("quiz", () =>
 		fetchQuestions({
 			count: sliderState,
@@ -53,6 +47,32 @@ function Quiz() {
 			enabled: !!quizQuery.data,
 		}
 	);
+	const timerQuery = useQuery(
+		"timer",
+		() => {
+			return {
+				counter: quizQuery.data.length * 1000,
+				initialTime: new Date(),
+			};
+		},
+		{
+			enabled: !!quizQuery.data,
+		}
+	);
+
+	const submitQuizMutation = useMutation(async (selectedChoices) => {
+		return axios({
+			method: "POST",
+			data: {
+				selectedChoices,
+			},
+			withCredentials: true,
+			url: "/api/quiz/submitQuiz",
+		}).then((res) => {
+			console.log(res.data);
+			return res.data;
+		});
+	});
 
 	const [hasLoaded, hasError, hasData] = transformQueryObject([
 		timerQuery,
@@ -82,6 +102,27 @@ function Quiz() {
 
 	const isSelected = (pageIndex, orderIndex) => {
 		return selectionQuery.data[pageIndex] === orderIndex;
+	};
+
+	const submitQuiz = () => {
+		const selectedChoices = quizQuery.data.map((question, questionIndex) => {
+			const selectedChoiceOrder = selectionQuery.data[questionIndex];
+			if (!selectedChoiceOrder) {
+				return {
+					questionId: question.id,
+					choiceId: -1,
+				};
+			}
+			const selectedChoice = question.choice[selectedChoiceOrder];
+			return {
+				questionId: question.id,
+				choiceId: selectedChoice.id,
+			};
+		});
+
+		submitQuizMutation.mutate(selectedChoices);
+
+		setIsOpenScore(true);
 	};
 
 	return (
@@ -120,9 +161,9 @@ function Quiz() {
 									Previous
 								</button>
 								<Timer initialTime={getCounterTime()} />
-								{index === sliderState - 1 ? (
+								{index === quizQuery.data.length - 1 ? (
 									<button
-										onClick={() => setIsOpenScore(true)}
+										onClick={submitQuiz}
 										className="flex next-button ml-auto px-10 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-opacity-80"
 									>
 										Submit
