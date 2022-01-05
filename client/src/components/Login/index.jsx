@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../../images/Logo.svg";
 import Icon from "../../images/Icon.svg";
 import queryClient from "../../config/queryClient";
+import { getUserData } from "../../api/auth";
 import "./style.scss";
 
 function Login() {
@@ -41,8 +42,10 @@ function Login() {
 			});
 		},
 		{
-			onSuccess: (data) => {
+			onSuccess: async (data) => {
 				queryClient.setQueryData("session", data);
+				const userData = await getUserData(data.token);
+				queryClient.setQueryData("user_details", userData);
 				navigate("/dashboard", { replace: true });
 				setIsSubmitting(false);
 			},
