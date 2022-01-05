@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { useState } from "react";
 import { useQuery, useMutation } from "react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // Icons
@@ -15,12 +15,14 @@ import "./style.scss";
 import Timer from "./Timer";
 import CardChoice from "./CardChoice";
 import ScoreModal from "./ScoreModal";
+import queryClient from "../../config/queryClient";
 import { getUpdatedCounter, transformQueryObject } from "../../helper";
 
 function Quiz() {
 	// Hooks
-	const [index, setIndex] = useState(0);
 	const location = useLocation();
+	const navigate = useNavigate();
+	const [index, setIndex] = useState(0);
 	const [isOpenScore, setIsOpenScore] = useState(false);
 	const [score, setScore] = useState(0);
 	const { sliderState } = location.state;
@@ -128,10 +130,16 @@ function Quiz() {
 				choiceId: selectedChoice.id,
 			};
 		});
+		submitQuizMutation.mutateAsync(selectedChoices).then(() => {
+			setIsOpenScore(true);
+		});
 
-		submitQuizMutation.mutate(selectedChoices);
-
-		setIsOpenScore(true);
+		setTimeout(() => {
+			queryClient.removeQueries("quiz");
+			queryClient.removeQueries("selection");
+			queryClient.removeQueries("timer");
+			navigate("/");
+		}, 5000);
 	};
 
 	return (
