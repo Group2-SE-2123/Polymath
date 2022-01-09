@@ -108,7 +108,7 @@ const Welcome = () => {
 							onClick={logoutHandler}
 							className="mt-auto text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto"
 						>
-							<RiLogoutBoxFill size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
+							<RiLogoutBoxFill size={30} className="mr-7 my-5" style={{ color: "#696f79" }} />
 							<h3 className="cursor-pointer select-none my-auto dashboard-text font-semibold">
 								Log Out
 							</h3>
@@ -152,7 +152,7 @@ const SidebarButton = (props) => {
 			onClick={toggleFunc}
 			className="cursor-pointer select-none text-sm flex w-full pl-7 lg:pl-10 rounded-full mx-auto"
 		>
-			<Icon size={30} className="mr-7 my-5" style={{ color: "#696F79" }} />
+			<Icon size={30} className="mr-7 my-5" style={{ color: "#696f79" }} />
 			<h3 className="my-auto dashboard-text font-medium">{text}</h3>
 		</div>
 	);

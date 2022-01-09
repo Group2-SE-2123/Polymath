@@ -9,7 +9,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import Quiz from "./components/Quiz";
-import Sample from "./components/Sample";
 import NotFound from "./components/NotFound";
 
 function App() {
@@ -36,7 +35,6 @@ function App() {
 					}
 				></Route>
 				<Route path="*" element={<NotFound />} />
-				<Route path="/sample" element={<Sample />}></Route>
 			</Routes>
 		</BrowserRouter>
 	);

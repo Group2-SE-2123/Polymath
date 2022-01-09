@@ -4,8 +4,6 @@ import React from "react";
 
 import AlgbebraImg from "../../images/img/algebra.jpg";
 
-import "./style.scss";
-
 function QuizDetails() {
 	return (
 		<>

@@ -25,12 +25,12 @@ function DashboardView(props) {
 					<div className="dashboard-text text-3xl font-bold">Hans Daduya</div>
 					<div className="dashboard-text font-light">2nd Year Student</div>
 					<div className="w-full bg-gray-200 h-2 rounded-lg my-3">
-						<div className="bg-gray-400 h-2 rounded-lg w-1/2" style={{ width: "25%" }}></div>
+						<div className="bg-yellow-300 h-2 rounded-lg w-1/2" style={{ width: "25%" }}></div>
 					</div>
 					<div className="grid grid-cols-3 gap-3 my-5">
 						<div className="flex flex-row">
 							<div className="flex w-12 h-12 rounded-xl shadow-lg">
-								<AiFillFlag className="m-auto" size={30} style={{ color: "#696F79" }} />
+								<AiFillFlag className="m-auto" size={30} style={{ color: "#696f79" }} />
 							</div>
 							<div className="flex flex-col mx-2">
 								<div className="dashboard-text font-bold">
@@ -41,7 +41,7 @@ function DashboardView(props) {
 						</div>
 						<div className="flex flex-row">
 							<div className="flex w-12 h-12 rounded-xl shadow-lg">
-								<AiFillClockCircle className="m-auto" size={30} style={{ color: "#696F79" }} />
+								<AiFillClockCircle className="m-auto" size={30} style={{ color: "#696f79" }} />
 							</div>
 							<div className="flex flex-col mx-2">
 								<div className="inline-flex dashboard-text font-bold">
@@ -53,7 +53,7 @@ function DashboardView(props) {
 						</div>
 						<div className="flex flex-row">
 							<div className="flex w-12 h-12 rounded-xl shadow-lg">
-								<AiFillCheckCircle className="m-auto" size={30} style={{ color: "#696F79" }} />
+								<AiFillCheckCircle className="m-auto" size={30} style={{ color: "#696f79" }} />
 							</div>
 							<div className="flex flex-col mx-2">
 								<div className="dashboard-text font-bold">
@@ -70,7 +70,7 @@ function DashboardView(props) {
 					<div className="flex flex-row mx-5">
 						<h3 className="w-1/2 dashboard-text font-bold">Achievements</h3>
 						<div className="w-1/2 bg-gray-200 h-2 rounded-lg my-3">
-							<div className="bg-gray-400 h-2 rounded-lg w-1/2" style={{ width: "50%" }}></div>
+							<div className="bg-yellow-300 h-2 rounded-lg w-1/2" style={{ width: "50%" }}></div>
 						</div>
 					</div>
 					<div className="grid grid-cols-1 divide-y w-full p-4 bg-white shadow-2xl rounded-2xl">
