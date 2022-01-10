@@ -376,7 +376,7 @@ const NoAuth = () => {
     hover:text-gray-900
   "
 				>
-					Sign in
+					Log In
 				</button>
 			</Link>
 			<Link to="/register">
@@ -399,7 +399,7 @@ const NoAuth = () => {
     button-color-linear
   "
 				>
-					Sign up
+					Register
 				</button>
 			</Link>
 		</>
@@ -410,8 +410,12 @@ const Auth = ({ user }) => {
 	const { name } = user;
 	return (
 		<>
-			<FaUserAlt color="#FCC822" />
-			<h1 className="name-text ml-3">{name}</h1>
+			<Link to="/dashboard">
+				<div className="flex flex-row">
+					<FaUserAlt color="#FCC822" />
+					<h1 className="name-text ml-3 select-none">{name}</h1>
+				</div>
+			</Link>
 			<WhiteDropdown />
 		</>
 	);

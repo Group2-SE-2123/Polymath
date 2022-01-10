@@ -6,6 +6,7 @@ import RequireDetails from "./auth/RequireDetails";
 
 import Landing from "./components/Landing";
 import Login from "./components/Login";
+import SignIn from "./components/SignIn";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import Quiz from "./components/Quiz";
@@ -17,6 +18,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Landing />}></Route>
 				<Route path="/login" element={<Login />}></Route>
+				<Route path="/signin" element={<SignIn />}></Route>
 				<Route path="/register" element={<Register />}></Route>
 				<Route
 					path="/dashboard"
