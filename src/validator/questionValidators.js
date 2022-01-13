@@ -62,7 +62,6 @@ const validateQuestionResult = checkSchema({
 	},
 });
 
-// check if question is valid and must be required
 const validateSampleQuestion = checkSchema({
 	text: {
 		in: ["body"],
@@ -75,4 +74,42 @@ const validateSampleQuestion = checkSchema({
 	},
 });
 
-export { validateQuestion, validateQuestionResult, validateSampleQuestion };
+const validationQuizQuestions = checkSchema({
+	count: {
+		in: ["body"],
+		isInt: true,
+		toInt: true,
+		errorMessage: "Count must be an integer",
+		custom: {
+			options: (value) => {
+				return value % 5 === 0 && value >= 5 && value <= 50;
+			},
+		},
+	},
+	topics: {
+		in: ["body"],
+		isArray: true,
+		custom: {
+			options: (value) => {
+				return value.length > 0 && value.every((topic) => typeof topic === "string");
+			},
+		},
+	},
+	difficulty: {
+		in: ["body"],
+		isString: true,
+		trim: true,
+		custom: {
+			options: (value) => {
+				return ["Easy", "Medium", "Hard"].includes(value);
+			},
+		},
+	},
+});
+
+export {
+	validateQuestion,
+	validateQuestionResult,
+	validateSampleQuestion,
+	validationQuizQuestions,
+};

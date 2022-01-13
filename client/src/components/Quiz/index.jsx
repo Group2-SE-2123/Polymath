@@ -25,25 +25,25 @@ function Quiz() {
 	const [index, setIndex] = useState(0);
 	const [isOpenScore, setIsOpenScore] = useState(false);
 	const [score, setScore] = useState(0);
-	const { sliderState } = location.state;
 
 	// Fetch Fns
-	const fetchQuestions = async (count) => {
+	const fetchQuestions = async (state) => {
+		const newState = {
+			count: state.sliderState,
+			topics: state.topicsState.filter((topic) => topic.selected).map((topic) => topic.name),
+			difficulty: state.difficultyState,
+		};
 		return axios({
 			method: "POST",
-			data: count,
-			url: "/api/question/randomQuestions",
+			data: newState,
+			url: "/api/question/getQuizQuestions",
 		}).then((questions) => {
 			return questions.data;
 		});
 	};
 
 	// React Queries
-	const quizQuery = useQuery("quiz", () =>
-		fetchQuestions({
-			count: sliderState,
-		})
-	);
+	const quizQuery = useQuery("quiz", () => fetchQuestions(location.state));
 	const selectionQuery = useQuery(
 		"selection",
 		() => {

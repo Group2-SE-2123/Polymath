@@ -6,8 +6,9 @@ import {
 	getQuestionById,
 	createQuestion,
 	getRandomQuestions,
+	getOfflineQuestions,
 } from "../controller/question";
-import { validateQuestion } from "../validator/questionValidators";
+import { validateQuestion, validationQuizQuestions } from "../validator/questionValidators";
 
 const router = express.Router();
 
@@ -42,6 +43,21 @@ router.get("/getQuestion", (req, res) => {
 router.post("/randomQuestions", (req, res) => {
 	const { count } = req.body;
 	getRandomQuestions(count)
+		.then((questions) => res.send(questions))
+		.catch((err) => res.status(400).send(err));
+});
+
+router.post("/getQuizQuestions", validationQuizQuestions, (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({
+			errors: errors.array(),
+		});
+	}
+
+	const { count, topics, difficulty } = req.body;
+	return getOfflineQuestions(count, topics, difficulty)
 		.then((questions) => res.send(questions))
 		.catch((err) => res.status(400).send(err));
 });

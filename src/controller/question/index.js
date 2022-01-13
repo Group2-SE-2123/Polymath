@@ -63,4 +63,51 @@ const getRandomQuestions = async (count) => {
 	return randomQuestions;
 };
 
-export { getAllQuestions, getQuestionById, createQuestion, deleteQuestion, getRandomQuestions };
+const getOfflineQuestions = async (count, topics, difficulty) => {
+	const questionsCount = await prisma.question.count();
+	const skip = Math.floor(Math.random() * questionsCount);
+	return prisma.question.findMany({
+		where: {
+			AND: [
+				{
+					category: {
+						name: {
+							in: topics,
+						},
+					},
+				},
+				{
+					difficulty: {
+						equals: difficulty,
+					},
+				},
+			],
+		},
+		take: count,
+		skip,
+		orderBy: {
+			id: "asc",
+		},
+		select: {
+			id: true,
+			text: true,
+			category: true,
+			difficulty: true,
+			choice: {
+				select: {
+					id: true,
+					text: true,
+				},
+			},
+		},
+	});
+};
+
+export {
+	getAllQuestions,
+	getQuestionById,
+	createQuestion,
+	deleteQuestion,
+	getRandomQuestions,
+	getOfflineQuestions,
+};

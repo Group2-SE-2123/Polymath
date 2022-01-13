@@ -107,7 +107,6 @@ function Register() {
 									value={firstName}
 									onChange={(e) => setFirstName(e.target.value)}
 									label="First Name"
-									halfWidth
 									required
 									name="firstName"
 									variant="outlined"
@@ -118,7 +117,6 @@ function Register() {
 										value={lastName}
 										onChange={(e) => setLastName(e.target.value)}
 										label="Last Name"
-										halfWidth
 										required
 										name="lastName"
 										variant="outlined"
