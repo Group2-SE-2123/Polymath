@@ -2,6 +2,10 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Stepper, Step, StepLabel, StepConnector } from "@mui/material";
+import { stepConnectorClasses } from "@mui/material/StepConnector";
+import { styled } from "@mui/material/styles";
+import PropTypes from "prop-types";
 import axios from "axios";
 
 // Icons
@@ -17,6 +21,80 @@ import CardChoice from "./CardChoice";
 import ScoreModal from "./ScoreModal";
 import queryClient from "../../config/queryClient";
 import { getUpdatedCounter, transformQueryObject } from "../../helper";
+
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+	[`&.${stepConnectorClasses.alternativeLabel}`]: {
+		top: 22,
+	},
+	[`&.${stepConnectorClasses.active}`]: {
+		[`& .${stepConnectorClasses.line}`]: {
+			backgroundColor: "#fcc822",
+		},
+	},
+	[`&.${stepConnectorClasses.completed}`]: {
+		[`& .${stepConnectorClasses.line}`]: {
+			backgroundColor: "#fcc822",
+		},
+	},
+	[`& .${stepConnectorClasses.line}`]: {
+		height: 3,
+		border: 0,
+		backgroundColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
+		borderRadius: 1,
+	},
+}));
+
+const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
+	backgroundColor: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#ccc",
+	zIndex: 1,
+	color: "#fff",
+	fontWeight: "bold",
+	width: 50,
+	height: 50,
+	display: "flex",
+	borderRadius: "50%",
+	justifyContent: "center",
+	alignItems: "center",
+	...(ownerState.active && {
+		backgroundColor: "#fcc822",
+		boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
+	}),
+	...(ownerState.completed && {
+		backgroundColor: "#fcc822",
+	}),
+	fontSize: "1.5rem",
+	userSelect: "none",
+}));
+
+function ColorlibStepIcon(props) {
+	const { active, completed, className } = props;
+
+	return (
+		<ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
+			{props.icon}
+		</ColorlibStepIconRoot>
+	);
+}
+
+ColorlibStepIcon.propTypes = {
+	/**
+	 * Whether this step is active.
+	 * @default false
+	 */
+	active: PropTypes.bool,
+	className: PropTypes.string,
+	/**
+	 * Mark the step as completed. Is passed to child components.
+	 * @default false
+	 */
+	completed: PropTypes.bool,
+	/**
+	 * The label displayed in the step icon.
+	 */
+	icon: PropTypes.node,
+};
+
+const steps = Array.from({ length: 5 }, (_, i) => i + 1);
 
 function Quiz() {
 	// Hooks
@@ -153,6 +231,18 @@ function Quiz() {
 				<>
 					{hasData && (
 						<>
+							<Stepper
+								sx={{ mt: 6 }}
+								alternativeLabel
+								activeStep={2}
+								connector={<ColorlibConnector />}
+							>
+								{steps.map((label) => (
+									<Step key={label}>
+										<StepLabel StepIconComponent={ColorlibStepIcon}>{""}</StepLabel>
+									</Step>
+								))}
+							</Stepper>
 							<div className="flex question-section container mx-auto h-60 my-10 select-none">
 								<h1 className="m-auto text-4xl question-text">{quizQuery.data[index].text}</h1>
 							</div>

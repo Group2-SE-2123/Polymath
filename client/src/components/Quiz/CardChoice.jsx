@@ -3,7 +3,9 @@ import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useTimeoutFn } from "react-use";
 import { useMutation } from "react-query";
+import { BlockMath } from "react-katex";
 import produce from "immer";
+import "katex/dist/katex.min.css";
 import PropTypes from "prop-types";
 
 import { numberToLetter } from "../../helper";
@@ -41,6 +43,8 @@ const CardChoice = ({ props, length, order, pageIndex, isSelected }) => {
 		return `flex w-full h-full ${cardColor} shadow-lg px-4 py-2 py-auto`;
 	};
 
+	const scrollColor = isSelected ? "yellow" : "gray";
+
 	return (
 		<div onClick={() => chooseCard({ order, pageIndex })} className={cardDimensions}>
 			<div className="flex flex-col items-center select-none cursor-pointer">
@@ -62,7 +66,13 @@ const CardChoice = ({ props, length, order, pageIndex, isSelected }) => {
 							}}
 							className={getCardClass(isSelected)}
 						>
-							<h2 className="m-auto choice-text text-2xl font-extrabold">{props.text}</h2>
+							<h2 className="m-auto choice-text text-2xl font-extrabold overflow-auto">
+								<div
+									className={`scrollbar scrollbar-thumb-custom-${scrollColor} scrollbar-track-custom-${scrollColor} overflow-y-scroll`}
+								>
+									<BlockMath>{props.text}</BlockMath>
+								</div>
+							</h2>
 							<h3 className="absolute l-0 t-5 text-xl font-bold">{addLetter(order)}</h3>
 						</div>
 					</Transition>

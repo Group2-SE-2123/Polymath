@@ -64,9 +64,7 @@ const getRandomQuestions = async (count) => {
 };
 
 const getOfflineQuestions = async (count, topics, difficulty) => {
-	const questionsCount = await prisma.question.count();
-	const skip = Math.floor(Math.random() * questionsCount);
-	return prisma.question.findMany({
+	const questions = await prisma.question.findMany({
 		where: {
 			AND: [
 				{
@@ -83,11 +81,6 @@ const getOfflineQuestions = async (count, topics, difficulty) => {
 				},
 			],
 		},
-		take: count,
-		skip,
-		orderBy: {
-			id: "asc",
-		},
 		select: {
 			id: true,
 			text: true,
@@ -101,6 +94,8 @@ const getOfflineQuestions = async (count, topics, difficulty) => {
 			},
 		},
 	});
+	const randomizedQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, count);
+	return randomizedQuestions;
 };
 
 export {
