@@ -7,6 +7,7 @@ import {
 	createQuestion,
 	getRandomQuestions,
 	getOfflineQuestions,
+	connectQuestionToQuiz,
 } from "../controller/question";
 import { validateQuestion, validationQuizQuestions } from "../validator/questionValidators";
 
@@ -59,6 +60,13 @@ router.post("/getQuizQuestions", validationQuizQuestions, (req, res) => {
 	const { count, topics, difficulty } = req.body;
 	return getOfflineQuestions(count, topics, difficulty)
 		.then((questions) => res.send(questions))
+		.catch((err) => res.status(400).send(err));
+});
+
+router.put("/connectQuestion", (req, res) => {
+	const { questionId, quizId } = req.body;
+	return connectQuestionToQuiz(questionId, quizId)
+		.then(res.send({ success: true }))
 		.catch((err) => res.status(400).send(err));
 });
 

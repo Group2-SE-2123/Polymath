@@ -98,6 +98,21 @@ const getOfflineQuestions = async (count, topics, difficulty) => {
 	return randomizedQuestions;
 };
 
+const connectQuestionToQuiz = async (questionId, quizId) => {
+	return prisma.question.update({
+		where: {
+			id: questionId,
+		},
+		data: {
+			quiz: {
+				connect: {
+					id: quizId,
+				},
+			},
+		},
+	});
+};
+
 export {
 	getAllQuestions,
 	getQuestionById,
@@ -105,4 +120,5 @@ export {
 	deleteQuestion,
 	getRandomQuestions,
 	getOfflineQuestions,
+	connectQuestionToQuiz,
 };
