@@ -113,6 +113,16 @@ const connectQuestionToQuiz = async (questionId, quizId) => {
 	});
 };
 
+const getQuestionsFromQuiz = async (quizId) => {
+	return prisma.question.findMany({
+		where: {
+			quiz: {
+				id: quizId,
+			},
+		},
+	});
+};
+
 export {
 	getAllQuestions,
 	getQuestionById,
@@ -121,4 +131,5 @@ export {
 	getRandomQuestions,
 	getOfflineQuestions,
 	connectQuestionToQuiz,
+	getQuestionsFromQuiz,
 };

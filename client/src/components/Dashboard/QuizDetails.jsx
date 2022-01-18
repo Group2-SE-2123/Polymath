@@ -1,5 +1,6 @@
 import React from "react";
 
+import { newQuizRecord } from "../../api/quizRecord";
 import queryClient from "../../config/queryClient";
 
 function QuizDetails() {
@@ -9,6 +10,20 @@ function QuizDetails() {
 		month: "long",
 		year: "numeric",
 	});
+
+	const startQuiz = async () => {
+		const sessionQuery = queryClient.getQueryData("session");
+		if (!sessionQuery) return;
+		const quizRecord = await newQuizRecord(sessionQuery.token, quizDetails.id);
+		console.log(quizRecord.data);
+		// queryClient.setQueryData("quiz_record", (prevState) => {
+		// 	return {
+		// 		...prevState,
+		// 		quizRecord,
+		// 	};
+		// });
+	};
+
 	return (
 		<>
 			<div className="mx-7 my-4">
@@ -62,7 +77,10 @@ function QuizDetails() {
 					</div>
 				</div>
 				<div className="flex mt-10">
-					<button className="transform transition duration-500 hover:scale-110 ml-auto w-44 h-14 button-color text-white rounded-full">
+					<button
+						onClick={startQuiz}
+						className="transform transition duration-500 hover:scale-110 ml-auto w-44 h-14 button-color text-white rounded-full"
+					>
 						Start
 					</button>
 				</div>

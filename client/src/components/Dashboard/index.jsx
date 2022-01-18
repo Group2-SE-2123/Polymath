@@ -6,7 +6,7 @@ import produce from "immer";
 import PropTypes from "prop-types";
 
 // Icons
-import { MdSpaceDashboard } from "react-icons/md";
+import { MdSpaceDashboard, MdQuiz } from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
 import { IoMdNotifications } from "react-icons/io";
 import { RiLogoutBoxFill } from "react-icons/ri";
@@ -29,6 +29,7 @@ const Welcome = () => {
 		notificationsState: false,
 		quizzesListState: false,
 		quizDetailsState: false,
+		activeQuizzes: false,
 	});
 
 	// Functions
@@ -103,6 +104,12 @@ const Welcome = () => {
 							isSelected={sidebarState.notificationsState}
 							toggleFunc={() => toggleSidebar("notificationsState")}
 						/>
+						<SidebarButton
+							text={"Quizzes"}
+							Icon={MdQuiz}
+							isSelected={sidebarState.activeQuizzes}
+							toggleFunc={() => toggleSidebar("activeQuizzes")}
+						/>
 
 						<div
 							onClick={logoutHandler}
@@ -123,8 +130,12 @@ const Welcome = () => {
 							},
 							{ state: sidebarState.supportState, component: <div>Support</div> },
 							{ state: sidebarState.notificationsState, component: <div>Notifications</div> },
-							{ state: sidebarState.quizzesListState, component: <QuizzesList /> },
+							{
+								state: sidebarState.quizzesListState,
+								component: <QuizzesList toggleFunc={toggleSidebar} />,
+							},
 							{ state: sidebarState.quizDetailsState, component: <QuizDetails /> },
+							{ state: sidebarState.activeQuizzes, component: <div>Active Quizzes</div> },
 							{ state: true, component: <div>Welcome</div> },
 						])}
 					</section>
