@@ -12,9 +12,16 @@ import ProfileImg from "../../images/img/profile.png";
 
 // Internal Imports
 import { NumberAnimation } from "../../animations";
+import queryClient from "../../config/queryClient";
 
 function DashboardView(props) {
 	const { dataQuery, toggleFunc } = props;
+
+	const toggleQuizDetails = (quiz) => () => {
+		queryClient.setQueryData("quiz_details_info", quiz);
+		toggleFunc("quizDetailsState");
+	};
+
 	return (
 		<>
 			<div className="flex w-full flex-col md:flex-row justify-center p-4">
@@ -114,7 +121,7 @@ function DashboardView(props) {
 								dataQuery.data.map((quiz) => {
 									return (
 										<div
-											onClick={() => toggleFunc("quizDetailsState")}
+											onClick={toggleQuizDetails(quiz)}
 											className="relative mx-auto transform transition duration-500 hover:scale-110"
 											key={quiz.id}
 										>
