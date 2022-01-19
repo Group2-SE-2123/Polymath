@@ -66,18 +66,42 @@ const getRandomQuestions = async (count) => {
 const getOfflineQuestions = async (count, topics, difficulty) => {
 	const questions = await prisma.question.findMany({
 		where: {
-			AND: [
+			OR: [
 				{
-					category: {
-						name: {
-							in: topics,
+					AND: [
+						{
+							category: {
+								name: {
+									in: topics,
+								},
+							},
 						},
-					},
+						{
+							difficulty: {
+								in: difficulty,
+							},
+						},
+					],
 				},
 				{
-					difficulty: {
-						equals: difficulty,
-					},
+					AND: [
+						{
+							category: {
+								name: {
+									in: topics,
+								},
+							},
+						},
+					],
+				},
+				{
+					AND: [
+						{
+							difficulty: {
+								in: difficulty,
+							},
+						},
+					],
 				},
 			],
 		},

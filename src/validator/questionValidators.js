@@ -91,7 +91,7 @@ const validationQuizQuestions = checkSchema({
 		isArray: true,
 		custom: {
 			options: (value) => {
-				return value.length > 0 && value.every((topic) => typeof topic === "string");
+				return value.length >= 0 && value.every((topic) => typeof topic === "string");
 			},
 		},
 	},
@@ -101,7 +101,12 @@ const validationQuizQuestions = checkSchema({
 		trim: true,
 		custom: {
 			options: (value) => {
-				return ["Easy", "Medium", "Hard"].includes(value);
+				return ["Easy", "Medium", "Hard", ""].includes(value) || value === null;
+			},
+		},
+		customSanitizer: {
+			options: (value) => {
+				return value === null || value === "" ? ["Easy", "Medium", "Hard", ""] : [value];
 			},
 		},
 	},
