@@ -4,9 +4,8 @@ import { useTimer } from "use-timer";
 import PropType from "prop-types";
 
 import Clock from "../../images/Clock.svg";
-import queryClient from "../../config/queryClient";
 
-const Timer = ({ initialTime }) => {
+const Timer = ({ initialTime, submitFunc }) => {
 	const { time, start } = useTimer({
 		initialTime,
 		timerType: "DECREMENTAL",
@@ -14,11 +13,8 @@ const Timer = ({ initialTime }) => {
 	});
 
 	useEffect(() => {
-		if (time === 0) {
-			queryClient.invalidateQueries("quiz");
-			queryClient.removeQueries("quiz");
-			queryClient.invalidateQueries("timer");
-			queryClient.removeQueries("timer");
+		if (time <= 0) {
+			submitFunc();
 		}
 	}, [time]);
 
@@ -40,6 +36,7 @@ const Timer = ({ initialTime }) => {
 
 Timer.propTypes = {
 	initialTime: PropType.number.isRequired,
+	submitFunc: PropType.func.isRequired,
 };
 
 export default Timer;

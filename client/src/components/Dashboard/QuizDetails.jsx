@@ -14,14 +14,7 @@ function QuizDetails() {
 	const startQuiz = async () => {
 		const sessionQuery = queryClient.getQueryData("session");
 		if (!sessionQuery) return;
-		const quizRecord = await newQuizRecord(sessionQuery.token, quizDetails.id);
-		console.log(quizRecord.data);
-		// queryClient.setQueryData("quiz_record", (prevState) => {
-		// 	return {
-		// 		...prevState,
-		// 		quizRecord,
-		// 	};
-		// });
+		await newQuizRecord(sessionQuery.token, quizDetails.id);
 	};
 
 	return (

@@ -18,6 +18,21 @@ import ScoreModal from "./ScoreModal";
 import queryClient from "../../config/queryClient";
 import { getUpdatedCounter, transformQueryObject } from "../../helper";
 
+const getTime = (quiz) => {
+	return quiz.reduce((acc, curr) => {
+		switch (curr.difficulty) {
+			case "Easy":
+				return acc + 30;
+			case "Medium":
+				return acc + 45;
+			case "Hard":
+				return acc + 60;
+			default:
+				return acc;
+		}
+	}, 0);
+};
+
 function Quiz() {
 	// Hooks
 	const location = useLocation();
@@ -53,11 +68,12 @@ function Quiz() {
 			enabled: !!quizQuery.data,
 		}
 	);
+
 	const timerQuery = useQuery(
 		"timer",
 		() => {
 			return {
-				counter: quizQuery.data.length * 1000,
+				counter: getTime(quizQuery.data),
 				initialTime: new Date(),
 			};
 		},
@@ -177,7 +193,7 @@ function Quiz() {
 									<GoTriangleLeft className="my-auto" />
 									Previous
 								</button>
-								<Timer initialTime={getCounterTime()} />
+								<Timer initialTime={getCounterTime()} submitFunc={submitQuiz} />
 								{index === quizQuery.data.length - 1 ? (
 									<button
 										onClick={submitQuiz}
