@@ -8,6 +8,7 @@ import {
 	getRandomQuestions,
 	getOfflineQuestions,
 	connectQuestionToQuiz,
+	deleteQuestion,
 } from "../controller/question";
 import { validateQuestion, validationQuizQuestions } from "../validator/questionValidators";
 
@@ -66,6 +67,14 @@ router.post("/getQuizQuestions", validationQuizQuestions, (req, res) => {
 router.put("/connectQuestion", (req, res) => {
 	const { questionId, quizId } = req.body;
 	return connectQuestionToQuiz(questionId, quizId)
+		.then(res.send({ success: true }))
+		.catch((err) => res.status(400).send(err));
+});
+
+// delete question
+router.delete("/deleteQuestion", (req, res) => {
+	const { id } = req.body;
+	return deleteQuestion(id)
 		.then(res.send({ success: true }))
 		.catch((err) => res.status(400).send(err));
 });

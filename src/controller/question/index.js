@@ -30,18 +30,20 @@ const createQuestion = (question) => {
 	});
 };
 
-const deleteQuestion = (id) => {
-	prisma.choices.deleteMany({
-		where: {
-			questionId: id,
-		},
-	});
-
-	return prisma.question.delete({
-		where: {
-			id,
-		},
-	});
+const deleteQuestion = async (id) => {
+	return prisma.choice
+		.deleteMany({
+			where: {
+				questionId: id,
+			},
+		})
+		.then(() =>
+			prisma.question.delete({
+				where: {
+					id,
+				},
+			})
+		);
 };
 
 const getRandomQuestions = async (count) => {
@@ -64,44 +66,25 @@ const getRandomQuestions = async (count) => {
 };
 
 const getOfflineQuestions = async (count, topics, difficulty) => {
+	const topicsList =
+		topics.length === 0
+			? await prisma.category.findMany().then((res) => res.map((topic) => topic.name))
+			: topics;
+
 	const questions = await prisma.question.findMany({
 		where: {
-			OR: [
+			AND: [
 				{
-					AND: [
-						{
-							category: {
-								name: {
-									in: topics,
-								},
-							},
+					category: {
+						name: {
+							in: topicsList,
 						},
-						{
-							difficulty: {
-								in: difficulty,
-							},
-						},
-					],
+					},
 				},
 				{
-					AND: [
-						{
-							category: {
-								name: {
-									in: topics,
-								},
-							},
-						},
-					],
-				},
-				{
-					AND: [
-						{
-							difficulty: {
-								in: difficulty,
-							},
-						},
-					],
+					difficulty: {
+						in: difficulty,
+					},
 				},
 			],
 		},
