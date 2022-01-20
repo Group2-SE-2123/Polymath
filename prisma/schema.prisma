@@ -15,7 +15,7 @@ model User {
   name     String
   email    String?
   password String?
-  isAdmin  Boolean   @default(false)
+  isAdmin  Boolean   @default(false) @map("is_admin")
   session  Session[]
   quiz     Quiz[]
   record   Record[]
@@ -23,35 +23,35 @@ model User {
 
 model Session {
   id           Int      @id @default(autoincrement())
-  refreshToken String
-  createdAt    DateTime @default(now())
+  refreshToken String   @map("refresh_token")
+  createdAt    DateTime @default(now()) @map("created_at")
   user         User?    @relation(fields: [userId], references: [id])
   userId       Int?
 }
 
 model Quiz {
   id        Int        @id @default(autoincrement())
-  userId    Int?
+  userId    Int?       @map("user_id")
   user      User?      @relation(fields: [userId], references: [id])
   name      String
   details   String
   length    Int
-  timeLimit Int
-  imageUrl  String
+  timeLimit Int        @map("time_limit")
+  imageUrl  String     @map("image_url")
   question  Question[]
   record    Record[]
 }
 
 model Record {
   id        Int       @id @default(autoincrement())
-  userId    Int
+  userId    Int       @map("user_id")
   user      User      @relation(fields: [userId], references: [id])
-  quizId    Int
+  quizId    Int       @map("quiz_id")
   quiz      Quiz      @relation(fields: [quizId], references: [id])
   score     Int
   time      Int
-  createdAt DateTime  @default(now())
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("deleted_at")
 }
 
 model Question {
@@ -61,8 +61,8 @@ model Question {
   choice     Choice[]
   quiz       Quiz?     @relation(fields: [quizId], references: [id])
   category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
-  quizId     Int?
+  categoryId Int?      @map("category_id")
+  quizId     Int?      @map("quiz_id")
 }
 
 model Category {
@@ -74,7 +74,7 @@ model Category {
 model Choice {
   id         Int      @id @default(autoincrement())
   text       String
-  isCorrect  Boolean  @default(false)
-  questionId Int
+  isCorrect  Boolean  @default(false) @map("is_correct")
+  questionId Int      @map("question_id")
   question   Question @relation(fields: [questionId], references: [id])
 }
