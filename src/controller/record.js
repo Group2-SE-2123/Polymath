@@ -70,4 +70,16 @@ const getUserQuizzes = (userId) => {
 		});
 };
 
-export { createRecord, updateRecord, getUserQuizzes };
+const updateRecordScore = (recordId, score) => {
+	return prisma.record.update({
+		where: {
+			id: recordId,
+		},
+		data: {
+			score,
+			deletedAt: new Date(),
+		},
+	});
+};
+
+export { createRecord, updateRecord, getUserQuizzes, updateRecordScore };

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createRecord, getUserQuizzes } from "../controller/record";
+import { createRecord, getUserQuizzes, updateRecordScore } from "../controller/record";
 import { getQuestionsFromQuiz } from "../controller/question";
 import { verifyUser } from "../auth/authenticate";
 
@@ -39,6 +39,13 @@ router.get("/user-quizzes", verifyUser, (req, res) => {
 	const userId = req.user.id;
 	getUserQuizzes(userId)
 		.then((quizzes) => res.send(quizzes))
+		.catch((err) => res.status(400).send(err));
+});
+
+router.put("/submit", verifyUser, (req, res) => {
+	const { recordId, score } = req.body;
+	return updateRecordScore(recordId, score)
+		.then(() => res.sendStatus(200))
 		.catch((err) => res.status(400).send(err));
 });
 

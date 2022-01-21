@@ -16,6 +16,7 @@ import Timer from "./Timer";
 import CardChoice from "./CardChoice";
 import ScoreModal from "./ScoreModal";
 import queryClient from "../../config/queryClient";
+import { submitQuizRecord } from "../../api/quizRecord";
 import { getUpdatedCounter, transformQueryObject } from "../../helper";
 
 const getTime = (quiz) => {
@@ -39,7 +40,6 @@ function Quiz() {
 	const [index, setIndex] = useState(0);
 	const [isOpenScore, setIsOpenScore] = useState(false);
 	const [score, setScore] = useState(0);
-
 	const { quizId } = useParams();
 
 	// Fetch Fns
@@ -48,7 +48,6 @@ function Quiz() {
 			method: "GET",
 			url: `/api/quiz/get-questions/${id}`,
 		}).then((questions) => {
-			console.log(questions);
 			return questions.data;
 		});
 	};
@@ -92,10 +91,15 @@ function Quiz() {
 			});
 		},
 		{
-			onSuccess: (data) => {
+			onSuccess: async (data) => {
 				const totalScore = data.reduce((acc, curr) => {
 					return acc + curr.isCorrect;
 				}, 0);
+				const { token } = queryClient.getQueryData("session");
+				await submitQuizRecord(token, +quizId, totalScore);
+				await queryClient.setQueryData("user_quizzes", (oldData) => {
+					return oldData.filter((obj) => obj.id !== +quizId);
+				});
 				setScore(totalScore);
 			},
 		}
@@ -150,7 +154,7 @@ function Quiz() {
 			queryClient.removeQueries(["quiz", quizId]);
 			queryClient.removeQueries(["selection", quizId]);
 			queryClient.removeQueries(["timer", quizId]);
-			navigate("/");
+			navigate("/dashboard");
 		}, 5000);
 	};
 
