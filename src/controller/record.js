@@ -29,4 +29,45 @@ const updateRecord = (quizRecordId, data) => {
 	});
 };
 
-export { createRecord, updateRecord };
+const getUserQuizzes = (userId) => {
+	return prisma.record
+		.findMany({
+			where: {
+				user: {
+					id: userId,
+				},
+			},
+			select: {
+				id: true,
+				score: true,
+				time: true,
+				createdAt: true,
+				deletedAt: true,
+				quiz: {
+					select: {
+						id: true,
+						name: true,
+						details: true,
+						imageUrl: true,
+					},
+				},
+			},
+			orderBy: {
+				createdAt: "desc",
+			},
+		})
+		.then((quizzes) => {
+			const now = new Date();
+			const filteredQuizzes = quizzes.filter((quiz) => {
+				if (quiz.deletedAt) {
+					return false;
+				}
+				const quizTime = new Date(quiz.createdAt);
+				quizTime.setSeconds(quizTime.getSeconds() + quiz.time);
+				return quizTime > now;
+			});
+			return filteredQuizzes;
+		});
+};
+
+export { createRecord, updateRecord, getUserQuizzes };

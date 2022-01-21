@@ -17,6 +17,7 @@ import Navbar from "../Navbar";
 import DashboardView from "./DashboardView";
 import QuizzesList from "./QuizzesList";
 import QuizDetails from "./QuizDetails";
+import ActiveQuizzes from "./ActiveQuizzes";
 import { getComponent } from "../../helper";
 import "./style.scss";
 
@@ -135,7 +136,7 @@ const Welcome = () => {
 								component: <QuizzesList toggleFunc={toggleSidebar} />,
 							},
 							{ state: sidebarState.quizDetailsState, component: <QuizDetails /> },
-							{ state: sidebarState.activeQuizzes, component: <div>Active Quizzes</div> },
+							{ state: sidebarState.activeQuizzes, component: <ActiveQuizzes /> },
 							{ state: true, component: <div>Welcome</div> },
 						])}
 					</section>
