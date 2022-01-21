@@ -1,9 +1,11 @@
 import React from "react";
-
-import { newQuizRecord } from "../../api/quizRecord";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { newQuizRecord, getUserQuizzes } from "../../api/quizRecord";
 import queryClient from "../../config/queryClient";
 
 function QuizDetails() {
+	const navigate = useNavigate();
 	const quizDetails = queryClient.getQueryData("quiz_details_info");
 	const dateNow = new Date().toLocaleDateString("en-US", {
 		day: "numeric",
@@ -11,10 +13,19 @@ function QuizDetails() {
 		year: "numeric",
 	});
 
+	const mutation = useMutation(getUserQuizzes, {
+		onSuccess: (data) => {
+			queryClient.setQueryData("user_quizzes", data);
+		},
+	});
+
 	const startQuiz = async () => {
 		const sessionQuery = queryClient.getQueryData("session");
 		if (!sessionQuery) return;
-		await newQuizRecord(sessionQuery.token, quizDetails.id);
+		const newQuiz = await newQuizRecord(sessionQuery.token, quizDetails.id);
+		const newQuizId = newQuiz.id;
+		mutation.mutate();
+		navigate(`/active-quiz/${newQuizId}`);
 	};
 
 	return (

@@ -46,4 +46,34 @@ const checkAnswers = async (answers) => {
 		});
 };
 
-export { createQuiz, getAllQuiz, checkAnswer, checkAnswers };
+const getQuestionsFromQuiz = async (id) => {
+	return prisma.record
+		.findFirst({
+			where: {
+				id,
+			},
+			select: {
+				quiz: {
+					select: {
+						question: {
+							select: {
+								id: true,
+								text: true,
+								category: true,
+								difficulty: true,
+								choice: {
+									select: {
+										id: true,
+										text: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+		.then((record) => record.quiz.question);
+};
+
+export { createQuiz, getAllQuiz, checkAnswer, checkAnswers, getQuestionsFromQuiz };

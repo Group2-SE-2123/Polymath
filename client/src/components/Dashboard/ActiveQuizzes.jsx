@@ -5,13 +5,19 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 
 import { getUserQuizzes } from "../../api/quizRecord";
 
 const MultiActionAreaCard = ({ quizDetails }) => {
+	const navigate = useNavigate();
 	const { quiz } = quizDetails;
 	const { name, details, imageUrl } = quiz;
+	const clickNavigation = () => {
+		navigate(`/active-quiz/${quizDetails.id}`);
+	};
+
 	return (
 		<Card sx={{ maxWidth: 345 }}>
 			<CardActionArea>
@@ -26,7 +32,7 @@ const MultiActionAreaCard = ({ quizDetails }) => {
 				</CardContent>
 			</CardActionArea>
 			<CardActions>
-				<Button size="small" color="primary">
+				<Button onClick={clickNavigation} size="small" color="primary">
 					Continue
 				</Button>
 			</CardActions>

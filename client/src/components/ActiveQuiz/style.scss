@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Roboto:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
+$gray: #d1d1d1;
+$yellow: #fcc822;
+$black: #000;
+$white: #fff;
+
+@mixin card-type($selected: true) {
+	@if $selected {
+		background-color: $yellow;
+		color: $white;
+	} @else {
+		background-color: $gray;
+		color: $black;
+	}
+}
+
+.font-roboto {
+	font-family: "Roboto", sans-serif;
+}
+
+.question-section {
+	background-color: #fcc822;
+}
+
+.card-color-selected {
+	@include card-type($selected: true);
+}
+
+.card-color-unselected {
+	@include card-type($selected: false);
+}
+
+.question-text {
+	color: #fff;
+	font-family: "Poppins", sans-serif;
+}
+
+.choice-text {
+	font-family: "Poppins", sans-serif;
+}
+
+.next-button {
+	background: linear-gradient(#fcc822, #ffcd2e);
+	box-shadow: 0px 10px 10px 0px rgba(255, 205, 46, 0.76);
+}
+
+.previous-button {
+	background: linear-gradient(#d1d1d1, #d1d1d1);
+	box-shadow: 0px 10px 10px -5px #d1d1d1;
+}

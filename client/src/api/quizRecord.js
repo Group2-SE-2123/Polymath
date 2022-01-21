@@ -12,7 +12,7 @@ const newQuizRecord = async (token, quizId) => {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
-	});
+	}).then((res) => res.data);
 };
 
 const updateQuizRecord = async (token, quizRecordId, data) => {
@@ -23,7 +23,7 @@ const updateQuizRecord = async (token, quizRecordId, data) => {
 			Authorization: `Bearer ${token}`,
 		},
 		data,
-	});
+	}).then((res) => res.data);
 };
 
 const getUserQuizzes = async () => {

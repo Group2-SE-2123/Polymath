@@ -10,6 +10,7 @@ import SignIn from "./components/SignIn";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import Quiz from "./components/Quiz";
+import ActiveQuiz from "./components/ActiveQuiz";
 import NotFound from "./components/NotFound";
 
 function App() {
@@ -34,6 +35,14 @@ function App() {
 						<RequireDetails>
 							<Quiz />
 						</RequireDetails>
+					}
+				></Route>
+				<Route
+					path="/active-quiz/:quizId"
+					element={
+						<RequireAuth>
+							<ActiveQuiz />
+						</RequireAuth>
 					}
 				></Route>
 				<Route path="*" element={<NotFound />} />
