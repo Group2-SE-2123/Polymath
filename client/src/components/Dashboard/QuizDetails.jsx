@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
-import { newQuizRecord, getUserQuizzes } from "../../api/quizRecord";
+import { useMutation, useQuery } from "react-query";
+import PropTypes from "prop-types";
+import { newQuizRecord, getUserQuizzes, getQuizResults } from "../../api/quizRecord";
 import queryClient from "../../config/queryClient";
 
-function QuizDetails() {
+function QuizDetails({ toggleFunc }) {
 	const navigate = useNavigate();
+	const { token } = queryClient.getQueryData("session") ?? "";
 	const quizDetails = queryClient.getQueryData("quiz_details_info");
 	const dateNow = new Date().toLocaleDateString("en-US", {
 		day: "numeric",
@@ -18,6 +20,15 @@ function QuizDetails() {
 			queryClient.setQueryData("user_quizzes", data);
 		},
 	});
+
+	const resultsQuery = useQuery("quiz_results", getQuizResults(token, quizDetails.id), {
+		enabled: false,
+	});
+
+	const clickResults = async () => {
+		await resultsQuery.refetch();
+		toggleFunc("quizResultsState");
+	};
 
 	const startQuiz = async () => {
 		const sessionQuery = queryClient.getQueryData("session");
@@ -82,6 +93,12 @@ function QuizDetails() {
 				</div>
 				<div className="flex mt-10">
 					<button
+						onClick={clickResults}
+						className="transform transition duration-500 hover:scale-110 mr-auto w-44 h-14 button-color text-white rounded-full"
+					>
+						Results
+					</button>
+					<button
 						onClick={startQuiz}
 						className="transform transition duration-500 hover:scale-110 ml-auto w-44 h-14 button-color text-white rounded-full"
 					>
@@ -92,5 +109,9 @@ function QuizDetails() {
 		</>
 	);
 }
+
+QuizDetails.propTypes = {
+	toggleFunc: PropTypes.func.isRequired,
+};
 
 export default QuizDetails;

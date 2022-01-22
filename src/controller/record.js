@@ -82,4 +82,28 @@ const updateRecordScore = (recordId, score) => {
 	});
 };
 
-export { createRecord, updateRecord, getUserQuizzes, updateRecordScore };
+const getQuizResults = (quizId) => {
+	return prisma.record.findMany({
+		where: {
+			quizId,
+			NOT: {
+				deletedAt: null,
+			},
+		},
+		select: {
+			id: true,
+			score: true,
+			time: true,
+			createdAt: true,
+			deletedAt: true,
+			quiz: {
+				select: {
+					name: true,
+					length: true,
+				},
+			},
+		},
+	});
+};
+
+export { createRecord, updateRecord, getUserQuizzes, updateRecordScore, getQuizResults };

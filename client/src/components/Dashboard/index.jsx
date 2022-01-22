@@ -18,6 +18,7 @@ import DashboardView from "./DashboardView";
 import QuizzesList from "./QuizzesList";
 import QuizDetails from "./QuizDetails";
 import ActiveQuizzes from "./ActiveQuizzes";
+import QuizResults from "./QuizResults";
 import { getComponent } from "../../helper";
 import "./style.scss";
 
@@ -31,6 +32,7 @@ const Welcome = () => {
 		quizzesListState: false,
 		quizDetailsState: false,
 		activeQuizzes: false,
+		quizResultsState: false,
 	});
 
 	// Functions
@@ -135,9 +137,19 @@ const Welcome = () => {
 								state: sidebarState.quizzesListState,
 								component: <QuizzesList toggleFunc={toggleSidebar} />,
 							},
-							{ state: sidebarState.quizDetailsState, component: <QuizDetails /> },
+							{
+								state: sidebarState.quizDetailsState,
+								component: <QuizDetails toggleFunc={toggleSidebar} />,
+							},
 							{ state: sidebarState.activeQuizzes, component: <ActiveQuizzes /> },
-							{ state: true, component: <div>Welcome</div> },
+							{
+								state: sidebarState.quizResultsState,
+								component: <QuizResults />,
+							},
+							{
+								state: true,
+								component: <DashboardView dataQuery={quizzesQuery} toggleFunc={toggleSidebar} />,
+							},
 						])}
 					</section>
 				</main>

@@ -45,6 +45,14 @@ function App() {
 						</RequireAuth>
 					}
 				></Route>
+				<Route
+					path="/results/:quizId"
+					element={
+						<RequireAuth>
+							<div>Results</div>
+						</RequireAuth>
+					}
+				></Route>
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>

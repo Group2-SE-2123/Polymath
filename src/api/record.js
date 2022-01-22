@@ -1,6 +1,11 @@
 import express from "express";
 
-import { createRecord, getUserQuizzes, updateRecordScore } from "../controller/record";
+import {
+	createRecord,
+	getUserQuizzes,
+	updateRecordScore,
+	getQuizResults,
+} from "../controller/record";
 import { getQuestionsFromQuiz } from "../controller/question";
 import { verifyUser } from "../auth/authenticate";
 
@@ -25,7 +30,7 @@ router.post("/new", verifyUser, (req, res) => {
 				return acc;
 			}, 0);
 			const createdAt = new Date();
-			return createRecord(userId, quizId, time * 10000, createdAt);
+			return createRecord(userId, quizId, time, createdAt);
 		})
 		.then((record) => {
 			return res.send(record);
@@ -46,6 +51,13 @@ router.put("/submit", verifyUser, (req, res) => {
 	const { recordId, score } = req.body;
 	return updateRecordScore(recordId, score)
 		.then(() => res.sendStatus(200))
+		.catch((err) => res.status(400).send(err));
+});
+
+router.get("/quiz-results/:id", verifyUser, (req, res) => {
+	const { id } = req.params;
+	return getQuizResults(+id)
+		.then((quizResults) => res.send(quizResults))
 		.catch((err) => res.status(400).send(err));
 });
 

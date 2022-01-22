@@ -51,4 +51,14 @@ const submitQuizRecord = async (token, recordId, score) => {
 	}).then((res) => res.data);
 };
 
-export { newQuizRecord, updateQuizRecord, getUserQuizzes, submitQuizRecord };
+const getQuizResults = (token, quizId) => async () => {
+	return axios({
+		method: "get",
+		url: `/api/record/quiz-results/${quizId}`,
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	}).then((res) => res.data);
+};
+
+export { newQuizRecord, updateQuizRecord, getUserQuizzes, submitQuizRecord, getQuizResults };
