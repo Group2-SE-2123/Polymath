@@ -19,6 +19,7 @@ import queryClient from "../../config/queryClient";
 import Hero from "../../images/Hero.svg";
 import Navbar from "../Navbar";
 import InputField from "./InputField";
+import { getUserData } from "../../api/auth";
 import { LogButton, LoadingLogButton } from "./Buttons";
 
 function Register() {
@@ -46,10 +47,15 @@ function Register() {
 			});
 		},
 		{
-			onSuccess: (data) => {
+			onSuccess: async (data) => {
 				setIsSubmitting(false);
 				queryClient.setQueryData("session", data);
+				const userData = await getUserData(data.token);
+				queryClient.setQueryData("user_details", userData);
 				navigate("/dashboard", { replace: true });
+			},
+			onError: () => {
+				setIsSubmitting(false);
 			},
 		}
 	);

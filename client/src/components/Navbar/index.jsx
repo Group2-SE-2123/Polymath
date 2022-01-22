@@ -9,7 +9,6 @@ import { FcAbout } from "react-icons/fc";
 import PropTypes from "prop-types";
 
 import Logo from "../../images/Logo.svg";
-import WhiteDropdown from "../Dropdowns/WhiteDropdown";
 import "./style.scss";
 
 import queryClient from "../../config/queryClient";
@@ -310,12 +309,11 @@ const Auth = ({ user }) => {
 	return (
 		<>
 			<Link to="/dashboard">
-				<div className="flex flex-row">
+				<div className="flex flex-row mr-3">
 					<FaUserAlt color="#FCC822" />
 					<h1 className="name-text ml-3 select-none">{name}</h1>
 				</div>
 			</Link>
-			<WhiteDropdown />
 		</>
 	);
 };

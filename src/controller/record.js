@@ -82,13 +82,14 @@ const updateRecordScore = (recordId, score) => {
 	});
 };
 
-const getQuizResults = (quizId) => {
+const getQuizResults = (userId, quizId) => {
 	return prisma.record.findMany({
 		where: {
 			quizId,
 			NOT: {
 				deletedAt: null,
 			},
+			userId,
 		},
 		select: {
 			id: true,

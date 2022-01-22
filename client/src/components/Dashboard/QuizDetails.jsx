@@ -8,6 +8,7 @@ import queryClient from "../../config/queryClient";
 function QuizDetails({ toggleFunc }) {
 	const navigate = useNavigate();
 	const { token } = queryClient.getQueryData("session") ?? "";
+	const { id: userId } = queryClient.getQueryData("user_details") ?? 0;
 	const quizDetails = queryClient.getQueryData("quiz_details_info");
 	const dateNow = new Date().toLocaleDateString("en-US", {
 		day: "numeric",
@@ -21,7 +22,7 @@ function QuizDetails({ toggleFunc }) {
 		},
 	});
 
-	const resultsQuery = useQuery("quiz_results", getQuizResults(token, quizDetails.id), {
+	const resultsQuery = useQuery("quiz_results", getQuizResults(token, userId, quizDetails.id), {
 		enabled: false,
 	});
 

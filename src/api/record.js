@@ -54,9 +54,9 @@ router.put("/submit", verifyUser, (req, res) => {
 		.catch((err) => res.status(400).send(err));
 });
 
-router.get("/quiz-results/:id", verifyUser, (req, res) => {
-	const { id } = req.params;
-	return getQuizResults(+id)
+router.get("/quiz-results/:userId/:quizId", verifyUser, (req, res) => {
+	const { userId, quizId } = req.params;
+	return getQuizResults(+userId, +quizId)
 		.then((quizResults) => res.send(quizResults))
 		.catch((err) => res.status(400).send(err));
 });

@@ -51,10 +51,10 @@ const submitQuizRecord = async (token, recordId, score) => {
 	}).then((res) => res.data);
 };
 
-const getQuizResults = (token, quizId) => async () => {
+const getQuizResults = (token, userId, quizId) => async () => {
 	return axios({
 		method: "get",
-		url: `/api/record/quiz-results/${quizId}`,
+		url: `/api/record/quiz-results/${userId}/${quizId}`,
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
