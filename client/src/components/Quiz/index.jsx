@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import produce from "immer";
 import axios from "axios";
 
 // Icons
@@ -154,6 +155,13 @@ function Quiz() {
 			queryClient.removeQueries("quiz");
 			queryClient.removeQueries("selection");
 			queryClient.removeQueries("timer");
+			queryClient.setQueriesData("category", (prevState) => {
+				return produce(prevState, (draft) => {
+					draft.forEach((topic) => {
+						topic.selected = false;
+					});
+				});
+			});
 			navigate("/");
 		}, 5000);
 	};

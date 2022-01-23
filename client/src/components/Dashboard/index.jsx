@@ -62,8 +62,7 @@ const Welcome = () => {
 		},
 		{
 			onSuccess: () => {
-				queryClient.removeQueries("session");
-				queryClient.removeQueries("user_details");
+				queryClient.clear();
 				navigate("/", { replace: true });
 			},
 		}
