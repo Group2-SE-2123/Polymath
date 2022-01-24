@@ -6,8 +6,8 @@ const validateQuestion = checkSchema({
 		isString: true,
 		trim: true,
 		isLength: {
-			options: { min: 5, max: 100 },
-			errorMessage: "Question text must be between 5 and 100 characters",
+			options: { min: 5, max: 500 },
+			errorMessage: "Question text must be between 5 and 500 characters",
 		},
 	},
 	categoryId: {
@@ -15,6 +15,12 @@ const validateQuestion = checkSchema({
 		isInt: true,
 		toInt: true,
 		errorMessage: "CategoryId must be an integer",
+	},
+	quizId: {
+		in: ["body"],
+		isInt: true,
+		toInt: true,
+		errorMessage: "QuizId must be an integer",
 	},
 	difficulty: {
 		in: ["body"],

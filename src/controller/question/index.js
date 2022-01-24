@@ -13,13 +13,18 @@ const getQuestionById = (id) => {
 };
 
 const createQuestion = (question) => {
-	const { text, categoryId, difficulty, choices } = question;
+	const { text, categoryId, quizId, difficulty, choices } = question;
 	return prisma.question.create({
 		data: {
 			text,
 			category: {
 				connect: {
 					id: categoryId,
+				},
+			},
+			quiz: {
+				connect: {
+					id: quizId,
 				},
 			},
 			difficulty,

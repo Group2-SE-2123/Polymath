@@ -10,7 +10,7 @@ function QuizDetails({ toggleFunc }) {
 	const { token } = queryClient.getQueryData("session") ?? "";
 	const { id: userId } = queryClient.getQueryData("user_details") ?? 0;
 	const quizDetails = queryClient.getQueryData("quiz_details_info");
-	const dateNow = new Date().toLocaleDateString("en-US", {
+	const dateNow = new Date().toLocaleDateString("en-PH", {
 		day: "numeric",
 		month: "long",
 		year: "numeric",
